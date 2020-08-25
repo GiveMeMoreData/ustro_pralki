@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ustropralki/QRScan.dart';
+import 'package:ustropralki/templates/DevicesSingleton.dart';
+import 'package:ustropralki/templates/localization.dart';
 
 import 'HomePage.dart';
 
@@ -25,11 +30,52 @@ class MyApp extends StatelessWidget {
         )),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      supportedLocales: [
+        Locale('en',''),
+        Locale('pl',''),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       initialRoute: "/",
       routes: {
-        "/" : (context) => MyHomePage(),
+        "/" : (context) => LoadingPage(),
+        "/home": (context) => MyHomePage(),
         "/scan" : (context) => QRScan(),
       },
     );
   }
+}
+
+class LoadingPage extends StatelessWidget{
+
+  final DevicesInfoBase devices = DevicesInfoState();
+
+  void loadData(BuildContext context) async {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.white,
+    ));
+    final devicesList = (await Firestore.instance.collection('devices').getDocuments()).documents;
+    devices.setDeviceListFromDocumentSnapshotList(devicesList);
+    devices.listenForFirebaseChange();
+    Navigator.of(context).pushReplacementNamed("/home");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    loadData(context);
+    return Container(
+      alignment: AlignmentDirectional.center,
+      color: Colors.white,
+      child: Image(
+        width: 200,
+        height: 200,
+        image: AssetImage("res/ustro_logo.png"),
+      ),
+    );
+  }
+
 }

@@ -34,8 +34,13 @@ class Device{
 
 abstract class DevicesInfoBase{
 
+
   @protected
   Map<String,Device> deviceMap;
+
+
+  @protected
+  Stream<bool> updateStream;
 
 
   @protected
@@ -70,6 +75,31 @@ abstract class DevicesInfoBase{
   void updateDeviceInFirestore(String deviceId, Map<String, dynamic> updateData){
     Firestore.instance.collection('devices').document(deviceId).setData(updateData, merge: true);
     print("[INFO] Update for $deviceId send");
+  }
+
+  void updateDevicesFromChangesList(List<DocumentChange> deviceChanges){
+      for(DocumentChange change in deviceChanges){
+        if(change.type == DocumentChangeType.removed){
+          deviceMap.remove(change.document.documentID);
+          continue;
+        }
+        if(change.type == DocumentChangeType.modified){
+          updateDeviceFromDocumentSnapshot(change.document);
+        }
+      }
+  }
+
+  void updateDeviceFromDocumentSnapshot(DocumentSnapshot deviceChange){
+    deviceMap[deviceChange.documentID].setName(deviceChange['name']);
+    deviceMap[deviceChange.documentID].setAvailable(deviceChange['available']);
+    deviceMap[deviceChange.documentID].setEnabled(deviceChange['enabled']);
+    deviceMap[deviceChange.documentID].setEndTime(deviceChange['end_time']);
+  }
+
+  void listenForFirebaseChange() async {
+    Firestore.instance.collection('devices').snapshots().listen((data) {
+     updateDevicesFromChangesList(data.documentChanges);
+    });
   }
 
   void setDeviceListFromDocumentSnapshotList(List<DocumentSnapshot> newDeviceList) {

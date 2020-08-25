@@ -37,7 +37,6 @@ dependencies:
   cloud_firestore: ^0.13.5
   flutter_countdown_timer: ^1.1.0
   qrscan: ^0.2.17
-  location: ^3.0.2
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +57,7 @@ flutter:
   assets:
     - res/languages/pl.json
     - res/languages/en.json
+    - res/ustro_logo.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

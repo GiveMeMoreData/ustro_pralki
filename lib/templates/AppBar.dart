@@ -1,13 +1,15 @@
 
 import 'package:flutter/material.dart';
+import 'package:ustropralki/templates/localization.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
 
   final String title;
   final double elevation;
   final double height;
+  Function callback;
 
-  CustomAppBar(this.title, {this.elevation = 2, this.height = kToolbarHeight});
+  CustomAppBar(this.title, {this.elevation = 2, this.height = kToolbarHeight, this.callback});
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -25,11 +27,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
         ),
       ),
       actions: <Widget>[
-        LanguageWidget(),
+        LanguageWidget(callback: callback,),
       ],
       backgroundColor: Colors.white,
       titleSpacing: 30,
-      iconTheme: IconThemeData( color: Color(0xDDE55900) ),
+      iconTheme: IconThemeData( color: Color(0xDDE55900)),
       elevation: elevation,
     );
   }
@@ -38,13 +40,17 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
 
 
 class LanguageWidget extends StatefulWidget{
+  final callback;
+
+  LanguageWidget({this.callback});
+
   @override
   State<StatefulWidget> createState() => _LanguageWidgetState();
 }
 
 class _LanguageWidgetState extends State<LanguageWidget>{
 
-  //todo load from locale properties
+
   bool _polishLanguageSelected = true;
 
   @override
@@ -60,8 +66,10 @@ class _LanguageWidgetState extends State<LanguageWidget>{
             Row(
               children: <Widget>[
                 GestureDetector(
-                  onTap: (){
+                  onTap: () async {
                     if(!_polishLanguageSelected){
+                      await AppLocalizations.of(context).loadNewLocale(Locale('pl',''));
+                      widget.callback((){});
                       setState(() {
                         _polishLanguageSelected = !_polishLanguageSelected;
                       });
@@ -80,8 +88,10 @@ class _LanguageWidgetState extends State<LanguageWidget>{
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () async {
                     if(_polishLanguageSelected){
+                      await AppLocalizations.of(context).loadNewLocale(Locale('en',''));
+                      widget.callback((){});
                       setState(() {
                         _polishLanguageSelected = !_polishLanguageSelected;
                       });

@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "569284982305",
-    "firebase_url": "https://ustropralki.firebaseio.com",
-    "project_id": "ustropralki",
-    "storage_bucket": "ustropralki.appspot.com"
+    "project_number": "663108879257",
+    "firebase_url": "https://ustropralki-fd26a.firebaseio.com",
+    "project_id": "ustropralki-fd26a",
+    "storage_bucket": "ustropralki-fd26a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:569284982305:android:662d1c864aec3e6c585560",
+        "mobilesdk_app_id": "1:663108879257:android:7a9fe7e855ed915f700908",
         "android_client_info": {
-          "package_name": "com.beljasiak.ustropralki"
+          "package_name": "pom.pomarancza.ustropralki"
         }
       },
       "oauth_client": [
         {
-          "client_id": "569284982305-lriato6mro6j9ok3nfcej33b9hdj12fe.apps.googleusercontent.com",
+          "client_id": "663108879257-1ulg72bjde9qvoj37qkops0uh3d5sris.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.beljasiak.ustropralki",
+            "package_name": "pom.pomarancza.ustropralki",
             "certificate_hash": "51a27705be6e3ad669dd28d0d3e01bf5772dc5c2"
           }
         },
         {
-          "client_id": "569284982305-4df3fknhsokdbhecpp5monclru50tiku.apps.googleusercontent.com",
+          "client_id": "663108879257-slcvgjv7put2i2g1mmlbhijtrkbgv9e9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBGUuWOCIr3gS8fy6VF2LJy3vUPgPM_Jmg"
+          "current_key": "AIzaSyDci3O7hWcSvveL0Gv983Yg1M6YfZwi13Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "569284982305-4df3fknhsokdbhecpp5monclru50tiku.apps.googleusercontent.com",
+              "client_id": "663108879257-slcvgjv7put2i2g1mmlbhijtrkbgv9e9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

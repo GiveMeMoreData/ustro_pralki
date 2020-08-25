@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/countdown_timer.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:ustropralki/templates/localization.dart';
 
 import 'templates/AppBar.dart';
 import 'templates/DevicesSingleton.dart';
@@ -19,16 +20,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final DevicesInfoBase devices = DevicesInfoState();
   TimeOfDay _endTime = TimeOfDay(hour: 1, minute: 0);
-
-
-
-  Future<dynamic> loadDevices() async {
-    if(devices.deviceMap.length==0){
-      final devicesList = (await Firestore.instance.collection('devices').getDocuments()).documents;
-      devices.setDeviceListFromDocumentSnapshotList(devicesList);
-    }
-    return devices;
-  }
 
 
   void useDevice(String deviceId, Timestamp endTime){
@@ -681,67 +672,56 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Ustro Pralki", elevation: 2,),
+      appBar: CustomAppBar("Ustro Pralki", elevation: 2.0, callback: setState,),
       body: Container(
           color: Theme.of(context).backgroundColor,
           alignment: AlignmentDirectional.center,
-          child: FutureBuilder(
-            future: loadDevices(),
-            builder: (context, asyncData){
-              if(asyncData.data == null || asyncData.connectionState == ConnectionState.waiting){
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else{
-                return Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: <Widget>[
-                    ListView.builder(
-                      padding: const EdgeInsets.all(25),
-                      itemCount: devices.deviceMap.length,
-                      itemBuilder: (context, int index){
-                        return DeviceListTile(device: devices.deviceMap.values.toList()[index],);
-                      },
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Theme.of(context).accentColor,
-                        elevation: 8,
-                        shadowColor: Color(0xAAFF6600),
-                        child: InkWell(
-                          onTap: () async {
-                            String cameraScanResult = await scanner.scan();
+          child: Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: <Widget>[
+              ListView.builder(
+                padding: const EdgeInsets.all(25),
+                itemCount: devices.deviceMap.length,
+                itemBuilder: (context, int index){
+                  return DeviceListTile(device: devices.deviceMap.values.toList()[index],);
+                },
+              ),
+              Positioned(
+                bottom: 20,
+                child: Material(
+                  borderRadius: BorderRadius.circular(40),
+                  color: Theme.of(context).accentColor,
+                  elevation: 8,
+                  shadowColor: Color(0xAAFF6600),
+                  child: InkWell(
+                    onTap: () async {
+                      String cameraScanResult = await scanner.scan();
 
-                            if(cameraScanResult == null){
-                              return;
-                            }
+                      if(cameraScanResult == null){
+                        return;
+                      }
 
-                            checkQRCode(cameraScanResult);
-                          },
-                          borderRadius: BorderRadius.circular(40),
-                          splashColor: Colors.black,
-                          child: Container(
-                            alignment: AlignmentDirectional.center,
-                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
-                            child: Text(
-                              "Zeskanuj kod QR",
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                      checkQRCode(cameraScanResult);
+                    },
+                    borderRadius: BorderRadius.circular(40),
+                    splashColor: Colors.black,
+                    child: Container(
+                      alignment: AlignmentDirectional.center,
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                      child: Text(
+                        "Zeskanuj kod QR",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
                         ),
                       ),
-                    )
-                  ],
-                );
-              }
-            },
-          )
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
       ),
     );
   }
@@ -822,7 +802,7 @@ class _DeviceListTileState extends State<DeviceListTile>{
                         if(device.available)
                           Text(
                           device.enabled?
-                            "Pralka gotowa do użycia!":
+                            AppLocalizations.of(context).translate("device_ready"):
                             "Wyłączona z użytku",
                           textAlign: TextAlign.center,
                           maxLines: 2,
