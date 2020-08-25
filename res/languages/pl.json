@@ -1,4 +1,24 @@
 {
   "hey" : "Hej!",
-  "device_ready" : "Gotowa do użycia!"
+  "device_ready" : "Gotowa do użycia!",
+  "device_active": "pozostało ",
+  "device_disabled": "Wyłączona z użytku",
+  "scan": "Zeskanuj kod QR",
+  "qr_search_fail": "Ten kod QR nie jest połączony z żadną pralką",
+  "qr_search_disabled": "Pralka wyłączona z użytku",
+  "make_laundry": "Wstaw pranie",
+  "wash_time": "Czas pranie",
+  "begin": "Rozpocznij",
+  "free_device": "Czy chcesz zgłosić tą pralkę jako wolną?",
+  "free_device_info": "Zrób to tylko jeżeli pralka faktycznie jest wolna. W innym przypadku RM Cię dojedzie.",
+  "no": "Nope",
+  "yes": "Tak",
+  "device_freed": "Pralka została zwolniona!",
+  "device_freed_info": "Wracasz do podglądu pralek czy od razu wstawiasz w tej pralce swoje pranie?",
+  "back": "Wracam",
+  "laundry": "Pranie!",
+  "qr_search_occupied": "Ta pralka jest już zajęta!",
+  "qr_search_occupied_info": "Pojczekaj aż pralka się zwolni i spróbuj ponownie.",
+  "ok": "Ok, idę na piwo",
+  "report_as_free": "zgłoś wolną pralkę"
 }

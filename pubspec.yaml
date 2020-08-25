@@ -37,6 +37,7 @@ dependencies:
   cloud_firestore: ^0.13.5
   flutter_countdown_timer: ^1.1.0
   qrscan: ^0.2.17
+  shared_preferences: ^0.5.10
 
 dev_dependencies:
   flutter_test:

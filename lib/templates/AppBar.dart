@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ustropralki/templates/localization.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
@@ -50,8 +51,21 @@ class LanguageWidget extends StatefulWidget{
 
 class _LanguageWidgetState extends State<LanguageWidget>{
 
-
   bool _polishLanguageSelected = true;
+  SharedPreferences prefs;
+
+  void checkLanguage() async {
+    prefs = await SharedPreferences.getInstance();
+    if(prefs.containsKey('language')){
+      _polishLanguageSelected = prefs.getString('language') == 'pl';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkLanguage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +83,9 @@ class _LanguageWidgetState extends State<LanguageWidget>{
                   onTap: () async {
                     if(!_polishLanguageSelected){
                       await AppLocalizations.of(context).loadNewLocale(Locale('pl',''));
+                      prefs.setString('language', 'pl');
+                      _polishLanguageSelected = !_polishLanguageSelected;
                       widget.callback((){});
-                      setState(() {
-                        _polishLanguageSelected = !_polishLanguageSelected;
-                      });
                     }
                   },
                   child: Padding(
@@ -91,10 +104,10 @@ class _LanguageWidgetState extends State<LanguageWidget>{
                   onTap: () async {
                     if(_polishLanguageSelected){
                       await AppLocalizations.of(context).loadNewLocale(Locale('en',''));
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.setString('language', 'en');
+                      _polishLanguageSelected = !_polishLanguageSelected;
                       widget.callback((){});
-                      setState(() {
-                        _polishLanguageSelected = !_polishLanguageSelected;
-                      });
                     }
                   },
                   child: Padding(

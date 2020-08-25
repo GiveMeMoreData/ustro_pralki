@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ustropralki/QRScan.dart';
 import 'package:ustropralki/templates/DevicesSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
@@ -51,13 +52,30 @@ class MyApp extends StatelessWidget {
 
 class LoadingPage extends StatelessWidget{
 
+  bool _dataLoaded = false;
+
   final DevicesInfoBase devices = DevicesInfoState();
 
   void loadData(BuildContext context) async {
+    if(_dataLoaded){
+      return;
+    }
+
+    // Prevents double loading of data, app builds this widget twice
+    _dataLoaded = true;
+
+    // Change default UI colors
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       systemNavigationBarColor: Colors.white,
     ));
+
+    //Load last used language
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.containsKey('language')){
+      AppLocalizations.of(context).loadNewLocale(Locale(prefs.getString('language'), ''));
+    }
+
     final devicesList = await Firestore.instance.collection('devices').getDocuments();
     devices.setDeviceListFromDocumentSnapshotList(devicesList.documents);
     Navigator.of(context).pushReplacementNamed("/home");

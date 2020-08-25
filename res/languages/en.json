@@ -1,4 +1,24 @@
 {
   "hey" : "Hi!",
-  "device_ready" : "Device is ready to use!"
+  "device_ready" : "Device is ready to use!",
+  "device_active": "remaining ",
+  "device_disabled": "Currently not in use",
+  "scan": "Scan QR code",
+  "qr_search_fail": "This QR code is not connected to any device",
+  "qr_search_disabled": "This device is currently not in use",
+  "make_laundry": "Make laundry",
+  "wash_time": "Washing time",
+  "begin": "Begin",
+  "free_device": "Do you want to report this device as free?",
+  "free_device_info": "Do it only if device in currently not working. Otherwise be prepared for revenge.",
+  "no": "Nope",
+  "yes": "Yes",
+  "device_freed": "Device has been freed!",
+  "device_freed_info": "Do you wish to go back to menu or make you own laundry?",
+  "back": "Back",
+  "laundry": "Laundry!",
+  "qr_search_occupied": "This device is occupied!",
+  "qr_search_occupied_info": "Wait until washing is over and then try again.",
+  "ok": "Ok, never mind",
+  "report_as_free": "report free device"
 }

@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                         child: Text(
-                          "Ten kod QR nie jest połączony z żadną pralką",
+                          AppLocalizations.of(context).translate('qr_search_fail'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
@@ -153,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                         child: Text(
-                          "Pralka wyłączona z użytku",
+                          AppLocalizations.of(context).translate('qr_search_disabled'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
@@ -212,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 25),
                         child: Text(
-                          "Ustaw pranie",
+                          AppLocalizations.of(context).translate('make_laundry'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -224,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          "Czas prania",
+                          AppLocalizations.of(context).translate('wash_time'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
@@ -278,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               alignment: AlignmentDirectional.center,
                               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                               child: Text(
-                                "Rozpocznij",
+                                AppLocalizations.of(context).translate('begin'),
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
@@ -334,7 +334,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 25),
                         child: Text(
-                          "Czy chcesz zgłosić tą pralkę jako wolną?",
+                          AppLocalizations.of(context).translate('free_device'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -346,7 +346,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                         child: Text(
-                          "Zrób to tylko jeżeli pralka faktycznie jest wolna. W innym przypadku RM Cię dojedzie.",
+                          AppLocalizations.of(context).translate('free_device_info'),
                           textAlign: TextAlign.center,
 
                           style: TextStyle(
@@ -376,7 +376,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   alignment: AlignmentDirectional.center,
                                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                                   child: Text(
-                                    "Nope",
+                                    AppLocalizations.of(context).translate('no'),
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -404,7 +404,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   alignment: AlignmentDirectional.center,
                                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                                   child: Text(
-                                    "Tak",
+                                    AppLocalizations.of(context).translate('yes'),
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -462,7 +462,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         child: Text(
-                          "Pralka została zwolniona!",
+                          AppLocalizations.of(context).translate('device_freed'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -474,7 +474,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                         child: Text(
-                          "Wracasz do podglądu pralek czy od razu wstawiasz w tej pralce swoje pranie?",
+                          AppLocalizations.of(context).translate('device_freed_info'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
@@ -503,7 +503,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   alignment: AlignmentDirectional.center,
                                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                                   child: Text(
-                                    "Wracam",
+                                    AppLocalizations.of(context).translate('back'),
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -530,7 +530,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   alignment: AlignmentDirectional.center,
                                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                                   child: Text(
-                                    "Pranie!",
+                                    AppLocalizations.of(context).translate('laundry'),
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -588,7 +588,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         child: Text(
-                          "Ta pralka jest już zajęta!",
+                          AppLocalizations.of(context).translate('qr_search_occupied'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -600,7 +600,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                         child: Text(
-                          "Pojczekaj aż pralka się zwolni i spróbuj ponownie.",
+                          AppLocalizations.of(context).translate('qr_search_occupied_info'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
@@ -627,7 +627,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               alignment: AlignmentDirectional.center,
                               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                               child: Text(
-                                "Ok, idę na piwo",
+                                AppLocalizations.of(context).translate('ok'),
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
@@ -646,7 +647,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                           child: Text(
-                            "zgłoś wolną pralkę",
+                            AppLocalizations.of(context).translate('report_as_free'),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w300,
@@ -718,7 +719,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       alignment: AlignmentDirectional.center,
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                       child: Text(
-                        "Zeskanuj kod QR",
+                        AppLocalizations.of(context).translate('scan'),
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,
@@ -812,7 +813,7 @@ class _DeviceListTileState extends State<DeviceListTile>{
                           Text(
                           device.enabled?
                             AppLocalizations.of(context).translate("device_ready"):
-                            "Wyłączona z użytku",
+                          AppLocalizations.of(context).translate('device_disabled'),
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           style: TextStyle(
@@ -825,7 +826,7 @@ class _DeviceListTileState extends State<DeviceListTile>{
                           Row(
                             children: <Widget>[
                               Text(
-                                "pozostało ",
+                                AppLocalizations.of(context).translate('device_active'),
                                 style: TextStyle(
                                   fontWeight: FontWeight.w300,
                                   fontSize: 18,

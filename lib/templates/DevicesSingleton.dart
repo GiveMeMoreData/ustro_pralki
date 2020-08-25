@@ -37,9 +37,6 @@ abstract class DevicesInfoBase{
   @protected
   Map<String,Device> deviceMap;
 
-
-
-
   @protected
   Map<String,Device> initialDeviceMap;
 
