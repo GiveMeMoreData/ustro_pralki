@@ -34,13 +34,10 @@ class Device{
 
 abstract class DevicesInfoBase{
 
-
   @protected
   Map<String,Device> deviceMap;
 
 
-  @protected
-  Stream<bool> updateStream;
 
 
   @protected
@@ -79,6 +76,10 @@ abstract class DevicesInfoBase{
 
   void updateDevicesFromChangesList(List<DocumentChange> deviceChanges){
       for(DocumentChange change in deviceChanges){
+        if(change.type == DocumentChangeType.added){
+          setDeviceFromDocumentSnapshot(change.document);
+          continue;
+        }
         if(change.type == DocumentChangeType.removed){
           deviceMap.remove(change.document.documentID);
           continue;
@@ -96,10 +97,32 @@ abstract class DevicesInfoBase{
     deviceMap[deviceChange.documentID].setEndTime(deviceChange['end_time']);
   }
 
-  void listenForFirebaseChange() async {
-    Firestore.instance.collection('devices').snapshots().listen((data) {
-     updateDevicesFromChangesList(data.documentChanges);
-    });
+
+  void setDeviceFromDocumentSnapshot(DocumentSnapshot newDevice){
+    final _timeNow = Timestamp.now().seconds;
+    final _deviceEndTime = newDevice['end_time'];
+    if(_deviceEndTime == null || _timeNow<_deviceEndTime.seconds){
+      deviceMap.putIfAbsent(newDevice.documentID, () => Device(
+        newDevice['name'],
+        newDevice['enabled'],
+        newDevice['available'],
+        newDevice['end_time'],
+      ));
+    } else {
+      deviceMap.putIfAbsent(newDevice.documentID, () => Device(
+        newDevice['name'],
+        newDevice['enabled'],
+        true,
+        null,
+      ));
+      updateDeviceInFirestore(
+          newDevice.documentID,
+          {
+            "available" : true,
+            "end_time" : null,
+          }
+      );
+    }
   }
 
   void setDeviceListFromDocumentSnapshotList(List<DocumentSnapshot> newDeviceList) {

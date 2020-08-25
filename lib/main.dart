@@ -58,9 +58,8 @@ class LoadingPage extends StatelessWidget{
       statusBarColor: Colors.transparent,
       systemNavigationBarColor: Colors.white,
     ));
-    final devicesList = (await Firestore.instance.collection('devices').getDocuments()).documents;
-    devices.setDeviceListFromDocumentSnapshotList(devicesList);
-    devices.listenForFirebaseChange();
+    final devicesList = await Firestore.instance.collection('devices').getDocuments();
+    devices.setDeviceListFromDocumentSnapshotList(devicesList.documents);
     Navigator.of(context).pushReplacementNamed("/home");
   }
 

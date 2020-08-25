@@ -21,7 +21,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final DevicesInfoBase devices = DevicesInfoState();
   TimeOfDay _endTime = TimeOfDay(hour: 1, minute: 0);
 
-
   void useDevice(String deviceId, Timestamp endTime){
     setState(() {
       devices.useDevice(deviceId, endTime);
@@ -33,6 +32,15 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+
+  void listenForFirebaseChange() async {
+    Firestore.instance.collection('devices').snapshots().listen((data) {
+      devices.updateDevicesFromChangesList(data.documentChanges);
+      setState(() {
+        print("[INFO] Database changed, update");
+      });
+    });
+  }
 
   void checkQRCode(String scanResult){
     if(devices.deviceMap.containsKey(scanResult)){
@@ -663,6 +671,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    listenForFirebaseChange();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       systemNavigationBarColor: Color(0xFFF9F3EE),
