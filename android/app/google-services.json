@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "569284982305",
+    "firebase_url": "https://ustropralki.firebaseio.com",
+    "project_id": "ustropralki",
+    "storage_bucket": "ustropralki.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569284982305:android:662d1c864aec3e6c585560",
+        "android_client_info": {
+          "package_name": "com.beljasiak.ustropralki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569284982305-lriato6mro6j9ok3nfcej33b9hdj12fe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.beljasiak.ustropralki",
+            "certificate_hash": "51a27705be6e3ad669dd28d0d3e01bf5772dc5c2"
+          }
+        },
+        {
+          "client_id": "569284982305-4df3fknhsokdbhecpp5monclru50tiku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGUuWOCIr3gS8fy6VF2LJy3vUPgPM_Jmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569284982305-4df3fknhsokdbhecpp5monclru50tiku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
