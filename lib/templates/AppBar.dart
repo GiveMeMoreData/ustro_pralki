@@ -31,7 +31,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
         LanguageWidget(callback: callback,),
       ],
       backgroundColor: Colors.white,
-      titleSpacing: 30,
+      titleSpacing: 10,
       iconTheme: IconThemeData( color: Color(0xDDE55900)),
       elevation: elevation,
     );

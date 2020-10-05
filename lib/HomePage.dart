@@ -1,5 +1,7 @@
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +10,7 @@ import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:ustropralki/templates/localization.dart';
 
 import 'templates/AppBar.dart';
+import 'templates/Drawer.dart';
 import 'templates/DevicesSingleton.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -18,24 +21,26 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  final User _user = FirebaseAuth.instance.currentUser;
+
   final DevicesInfoBase devices = DevicesInfoState();
   TimeOfDay _endTime = TimeOfDay(hour: 1, minute: 0);
 
   void useDevice(String deviceId, Timestamp endTime){
     setState(() {
-      devices.useDevice(deviceId, endTime);
+      devices.useDevice(deviceId, _user.uid, endTime);
     });
   }
   void freeDevice(String deviceId){
     setState(() {
-      devices.freeDevice(deviceId);
+      devices.freeDevice(deviceId, _user.uid);
     });
   }
 
 
   void listenForFirebaseChange() async {
-    Firestore.instance.collection('devices').snapshots().listen((data) {
-      devices.updateDevicesFromChangesList(data.documentChanges);
+    FirebaseFirestore.instance.collection('devices').snapshots().listen((data) {
+      devices.updateDevicesFromChangesList(data.docChanges);
       setState(() {
         print("[INFO] Database changed, update");
       });
@@ -193,24 +198,20 @@ class _MyHomePageState extends State<MyHomePage> {
               opacity: anim1.value,
               child: Dialog(
                 elevation: 30,
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.white,
                 shape: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
                 ),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.white,
-                  ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical : 25.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 25),
+                        padding: const EdgeInsets.fromLTRB(35,0,35,25),
                         child: Text(
                           AppLocalizations.of(context).translate('make_laundry'),
                           textAlign: TextAlign.center,
@@ -285,6 +286,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Colors.white,
                                 ),
                               ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          reportBrokenDeviceDialog(deviceId);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          child: Text(
+                            AppLocalizations.of(context).translate('report_broken_device'),
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              decoration: TextDecoration.underline,
+                              fontSize: 14,
+                              color: Colors.black87,
                             ),
                           ),
                         ),
@@ -443,26 +462,23 @@ class _MyHomePageState extends State<MyHomePage> {
               opacity: anim1.value,
               child: Dialog(
                 elevation: 30,
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.white,
                 shape: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
                 ),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.white,
-                  ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        child: Text(
+                        child: AutoSizeText(
                           AppLocalizations.of(context).translate('device_freed'),
+                          maxLines: 2,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -473,8 +489,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                        child: Text(
+                        child: AutoSizeText(
                           AppLocalizations.of(context).translate('device_freed_info'),
+                          maxLines: 3,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
@@ -502,8 +519,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Container(
                                   alignment: AlignmentDirectional.center,
                                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                                  child: Text(
+                                  child: AutoSizeText(
                                     AppLocalizations.of(context).translate('back'),
+                                    maxLines: 1,
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -529,8 +547,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Container(
                                   alignment: AlignmentDirectional.center,
                                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                                  child: Text(
+                                  child: AutoSizeText(
                                     AppLocalizations.of(context).translate('laundry'),
+                                    maxLines: 1,
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -569,26 +588,23 @@ class _MyHomePageState extends State<MyHomePage> {
               opacity: anim1.value,
               child: Dialog(
                 elevation: 30,
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.white,
                 shape: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
                 ),
-                child: Container(
-                  width: MediaQuery.of(context).size.width*0.9,
-                  height: MediaQuery.of(context).size.height*0.4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.white,
-                  ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 25.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        child: Text(
+                        padding: const EdgeInsets.fromLTRB(20,0,20,15),
+                        child: AutoSizeText(
                           AppLocalizations.of(context).translate('qr_search_occupied'),
+                          maxLines: 2,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -599,9 +615,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                        child: Text(
+                        child: AutoSizeText(
                           AppLocalizations.of(context).translate('qr_search_occupied_info'),
                           textAlign: TextAlign.center,
+                          maxLines: 2,
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
                             fontSize: 16,
@@ -626,9 +643,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Container(
                               alignment: AlignmentDirectional.center,
                               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
-                              child: Text(
+                              child: AutoSizeText(
                                 AppLocalizations.of(context).translate('ok'),
                                 textAlign: TextAlign.center,
+                                maxLines: 1,
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
@@ -646,9 +664,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                          child: Text(
+                          child: AutoSizeText(
                             AppLocalizations.of(context).translate('report_as_free'),
                             textAlign: TextAlign.center,
+                            maxLines: 1,
                             style: TextStyle(
                               fontWeight: FontWeight.w300,
                               decoration: TextDecoration.underline,
@@ -669,20 +688,132 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void reportBrokenDeviceDialog(String deviceId){
+    showGeneralDialog(
+        context: context,
+        pageBuilder: (context, anim1, anim2) {return;},
+        barrierDismissible: true,
+        barrierColor: Colors.white.withOpacity(0.1),
+        barrierLabel: '',
+        transitionBuilder: (context, anim1, anim2, child) {
+          final curvedValue = Curves.easeInOut.transform(anim1.value)- 1.0;
+          return Transform(
+            transform: Matrix4.translationValues(0, curvedValue*200, 0),
+            child: Opacity(
+              opacity: anim1.value,
+              child: Dialog(
+                elevation: 30,
+                backgroundColor: Colors.white,
+                shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide.none,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 25),
+                        child: Text(
+                          AppLocalizations.of(context).translate('report_broken'),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 25,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Material(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Theme.of(context).backgroundColor,
+                              elevation: 0,
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                onTap: (){
+                                  Navigator.of(context).pop();
+                                },
+                                child: Container(
+                                  alignment: AlignmentDirectional.center,
+                                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                                  child: Text(
+                                    AppLocalizations.of(context).translate('no'),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(context).accentColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Icon(null, size: 15),
+                            Material(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Theme.of(context).accentColor,
+                              elevation: 8,
+                              shadowColor: Color(0xAAFF6600),
+                              child: InkWell(
+                                onTap: (){
+
+                                  //todo report broken device
+                                },
+                                borderRadius: BorderRadius.circular(40),
+                                splashColor: Colors.black,
+                                child: Container(
+                                  alignment: AlignmentDirectional.center,
+                                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                                  child: Text(
+                                    AppLocalizations.of(context).translate('yes'),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        transitionDuration: Duration(milliseconds: 400)
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     listenForFirebaseChange();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
       systemNavigationBarColor: Color(0xFFF9F3EE),
     ));
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Ustro Pralki", elevation: 2.0, callback: setState,),
+      drawer: CustomDrawer(),
+      drawerScrimColor: Colors.black26,
+      drawerEdgeDragWidth: 100,
+      appBar: CustomAppBar("Ustro Pralki", elevation: 10.0, callback: setState,),
       body: Container(
           color: Theme.of(context).backgroundColor,
           alignment: AlignmentDirectional.center,
@@ -696,6 +827,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   return DeviceListTile(device: devices.deviceMap.values.toList()[index],);
                 },
               ),
+
+              // QR code scanner
               Positioned(
                 bottom: 20,
                 child: Material(

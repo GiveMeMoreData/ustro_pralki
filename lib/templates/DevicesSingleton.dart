@@ -40,12 +40,13 @@ abstract class DevicesInfoBase{
   @protected
   Map<String,Device> initialDeviceMap;
 
-  void useDevice(String deviceId, Timestamp endTime){
+  void useDevice(String deviceId, String userId, Timestamp endTime){
     deviceMap[deviceId].setAvailable(false);
     deviceMap[deviceId].setEndTime(endTime);
 
     final updateData = {
       "available" : false,
+      "current_user_id": userId,
       "end_time" : endTime,
     };
     print("[INFO] Device ${deviceMap[deviceId].name} is now working");
@@ -53,13 +54,14 @@ abstract class DevicesInfoBase{
     updateDeviceInFirestore(deviceId, updateData);
   }
 
-  void freeDevice(String deviceId){
+  void freeDevice(String deviceId, String userId){
     deviceMap[deviceId].setAvailable(true);
     deviceMap[deviceId].setEndTime(null);
 
     final updateData = {
       "available" : true,
       "end_time" : null,
+      "current_user_id": userId
     };
     print("[INFO] Device ${deviceMap[deviceId].name} freed successfully");
 
@@ -67,53 +69,53 @@ abstract class DevicesInfoBase{
   }
 
   void updateDeviceInFirestore(String deviceId, Map<String, dynamic> updateData){
-    Firestore.instance.collection('devices').document(deviceId).setData(updateData, merge: true);
+    Firestore.instance.collection('devices').doc(deviceId).set(updateData,SetOptions(merge: true));
     print("[INFO] Update for $deviceId send");
   }
 
   void updateDevicesFromChangesList(List<DocumentChange> deviceChanges){
       for(DocumentChange change in deviceChanges){
         if(change.type == DocumentChangeType.added){
-          setDeviceFromDocumentSnapshot(change.document);
+          setDeviceFromDocumentSnapshot(change.doc);
           continue;
         }
         if(change.type == DocumentChangeType.removed){
-          deviceMap.remove(change.document.documentID);
+          deviceMap.remove(change.doc.id);
           continue;
         }
         if(change.type == DocumentChangeType.modified){
-          updateDeviceFromDocumentSnapshot(change.document);
+          updateDeviceFromDocumentSnapshot(change.doc);
         }
       }
   }
 
   void updateDeviceFromDocumentSnapshot(DocumentSnapshot deviceChange){
-    deviceMap[deviceChange.documentID].setName(deviceChange['name']);
-    deviceMap[deviceChange.documentID].setAvailable(deviceChange['available']);
-    deviceMap[deviceChange.documentID].setEnabled(deviceChange['enabled']);
-    deviceMap[deviceChange.documentID].setEndTime(deviceChange['end_time']);
+    deviceMap[deviceChange.id].setName(deviceChange.get('name'));
+    deviceMap[deviceChange.id].setAvailable(deviceChange.get('available'));
+    deviceMap[deviceChange.id].setEnabled(deviceChange.get('enabled'));
+    deviceMap[deviceChange.id].setEndTime(deviceChange.get('end_time'));
   }
 
 
   void setDeviceFromDocumentSnapshot(DocumentSnapshot newDevice){
     final _timeNow = Timestamp.now().seconds;
-    final _deviceEndTime = newDevice['end_time'];
+    final _deviceEndTime = newDevice.get('end_time');
     if(_deviceEndTime == null || _timeNow<_deviceEndTime.seconds){
-      deviceMap.putIfAbsent(newDevice.documentID, () => Device(
-        newDevice['name'],
-        newDevice['enabled'],
-        newDevice['available'],
-        newDevice['end_time'],
+      deviceMap.putIfAbsent(newDevice.id, () => Device(
+        newDevice.get('name'),
+        newDevice.get('enabled'),
+        newDevice.get('available'),
+        newDevice.get('end_time'),
       ));
     } else {
-      deviceMap.putIfAbsent(newDevice.documentID, () => Device(
-        newDevice['name'],
-        newDevice['enabled'],
+      deviceMap.putIfAbsent(newDevice.id, () => Device(
+        newDevice.get('name'),
+        newDevice.get('enabled'),
         true,
         null,
       ));
       updateDeviceInFirestore(
-          newDevice.documentID,
+          newDevice.id,
           {
             "available" : true,
             "end_time" : null,
@@ -125,23 +127,23 @@ abstract class DevicesInfoBase{
   void setDeviceListFromDocumentSnapshotList(List<DocumentSnapshot> newDeviceList) {
     final _timeNow = Timestamp.now().seconds;
     for(DocumentSnapshot device in newDeviceList){
-      final _deviceEndTime = device['end_time'];
+      final _deviceEndTime = device.get('end_time');
       if(_deviceEndTime == null || _timeNow<_deviceEndTime.seconds){
-        deviceMap.putIfAbsent(device.documentID, () => Device(
-          device['name'],
-          device['enabled'],
-          device['available'],
-          device['end_time'],
+        deviceMap.putIfAbsent(device.id, () => Device(
+          device.get('name'),
+          device.get('enabled'),
+          device.get('available'),
+          device.get('end_time'),
         ));
       } else {
-        deviceMap.putIfAbsent(device.documentID, () => Device(
-          device['name'],
-          device['enabled'],
+        deviceMap.putIfAbsent(device.id, () => Device(
+          device.get('name'),
+          device.get('enabled'),
           true,
           null,
         ));
         updateDeviceInFirestore(
-            device.documentID,
+            device.id,
             {
               "available" : true,
               "end_time" : null,
