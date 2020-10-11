@@ -41,9 +41,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void listenForFirebaseChange() async {
     FirebaseFirestore.instance.collection('devices').snapshots().listen((data) {
       devices.updateDevicesFromChangesList(data.docChanges);
-      setState(() {
-        print("[INFO] Database changed, update");
-      });
+      if(mounted){
+        setState(() {
+          print("[INFO] Database changed, update");
+        });
+      }
+    });
+  }
+
+  void createReport(String deviceId){
+    FirebaseFirestore.instance.collection('reports').add({
+      "device_id": deviceId,
+      "user_id": _user.uid,
     });
   }
 
@@ -764,8 +773,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               shadowColor: Color(0xAAFF6600),
                               child: InkWell(
                                 onTap: (){
-
-                                  //todo report broken device
+                                  createReport(deviceId);
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                 },
                                 borderRadius: BorderRadius.circular(40),
                                 splashColor: Colors.black,
