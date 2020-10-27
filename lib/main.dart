@@ -115,7 +115,7 @@ class LoadingPage extends StatelessWidget{
     // Change default UI colors
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Color(0xFFF95901),
+      systemNavigationBarColor: Theme.of(context).accentColor,
       statusBarIconBrightness: Brightness.dark,
     ));
 
@@ -157,12 +157,7 @@ class LoadingPage extends StatelessWidget{
     initializeApp(context);
     return Container(
       alignment: AlignmentDirectional.center,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("res/loading_bg.png"),
-          fit: BoxFit.fill
-        ),
-      ),
+      color: Theme.of(context).accentColor,
       child: Image(
         width: 200,
         height: 200,

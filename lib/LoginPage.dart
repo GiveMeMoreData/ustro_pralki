@@ -195,50 +195,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
           ),
         ),
       ),
-
-
-      // body: Material(
-      //   color: Theme.of(context).backgroundColor,
-      //   child: InkWell(
-      //     onTap: _signInWithGoogle,
-      //     splashColor: Theme.of(context).primaryColor,
-      //     child: Container(
-      //       color: Colors.transparent,
-      //       alignment: AlignmentDirectional.center,
-      //       child: Stack(
-      //         alignment: AlignmentDirectional.center,
-      //         children: <Widget>[
-      //           Align(
-      //             alignment: AlignmentDirectional.bottomCenter,
-      //             child: AutoSizeText(
-      //               "Zaloguj",
-      //               textAlign: TextAlign.center,
-      //               maxLines: 1,
-      //               style: TextStyle(
-      //                 fontWeight: FontWeight.w900,
-      //                 fontSize: 200,
-      //                 height: 1.5,
-      //                 color: Colors.white,
-      //               ),
-      //             ),
-      //           ),
-      //           Container(
-      //             width: 60,
-      //             height: 60,
-      //             decoration: BoxDecoration(
-      //               image: DecorationImage(
-      //                 image: AssetImage("res/google_logo.png")
-      //               )
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
-
-
 }
 
