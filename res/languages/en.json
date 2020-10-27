@@ -8,6 +8,7 @@
   "qr_search_disabled": "This device is currently not in use",
   "make_laundry": "Make laundry",
   "wash_time": "Washing time",
+  "report_broken_device": "report broken device",
   "begin": "Begin",
   "free_device": "Do you want to report this device as free?",
   "free_device_info": "Do it only if device in currently not working. Otherwise be prepared for revenge.",
@@ -20,5 +21,10 @@
   "qr_search_occupied": "This device is occupied!",
   "qr_search_occupied_info": "Wait until washing is over and then try again.",
   "ok": "Ok, never mind",
-  "report_as_free": "report free device"
+  "report_as_free": "report free device",
+  "report_broken": "Are you sure you want to report this device as broken?",
+  "login_text": "Login to explore new functions of Ustro Pralki!",
+  "logout": "Log out",
+  "login_text_info": "Chill, signing in with Google only allows us to distinguish you from others. Your data is secure :) ",
+  "login_with_google": "Login with Google"
 }

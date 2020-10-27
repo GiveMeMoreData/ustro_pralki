@@ -7,7 +7,8 @@
   "qr_search_fail": "Ten kod QR nie jest połączony z żadną pralką",
   "qr_search_disabled": "Pralka wyłączona z użytku",
   "make_laundry": "Wstaw pranie",
-  "wash_time": "Czas pranie",
+  "wash_time": "Czas prania",
+  "report_broken_device": "zgłoś awarię pralki",
   "begin": "Rozpocznij",
   "free_device": "Czy chcesz zgłosić tą pralkę jako wolną?",
   "free_device_info": "Zrób to tylko jeżeli pralka faktycznie jest wolna. W innym przypadku RM Cię dojedzie.",
@@ -20,5 +21,10 @@
   "qr_search_occupied": "Ta pralka jest już zajęta!",
   "qr_search_occupied_info": "Pojczekaj aż pralka się zwolni i spróbuj ponownie.",
   "ok": "Ok, idę na piwo",
-  "report_as_free": "zgłoś wolną pralkę"
+  "report_as_free": "zgłoś wolną pralkę",
+  "report_broken": "Czy na pewno chcesz zgłosić awarię tej pralki?",
+  "login_text": "Zaloguj się żeby skorzystać z nowych funkcji Ustro Pralek!",
+  "logout": "Wyloguj się",
+  "login_text_info": "Spokojnie, logowanie z Google służy tylko do stworzenia konta użytkownika. Twoje dane są bezpieczne ;)",
+  "login_with_google": "Logowanie z Google"
 }
