@@ -82,6 +82,7 @@ class LoadingPage extends StatelessWidget{
         print('onMessage called');
         return;
       },
+      onBackgroundMessage: _onBackgroundMessage,
     );
     _firebaseMessaging.subscribeToTopic('all');
     _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(
@@ -99,6 +100,11 @@ class LoadingPage extends StatelessWidget{
       prefs.setString("FCM_token", token);
       print("device FCM token: $token");
     });
+  }
+
+  static Future<void> _onBackgroundMessage(Map<String, dynamic> message) {
+    print('onBackgroundMessage called');
+    return Future.value(null);
   }
 
   Future<void> checkIfLogged(BuildContext context) async {
