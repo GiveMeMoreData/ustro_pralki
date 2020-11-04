@@ -26,19 +26,26 @@ class _GoogleLoginState extends State<GoogleLogin>{
     // check if document with user id exists in database
     final DocumentSnapshot userData = await _firestore.collection('users').doc(user.uid).get();
 
+    // get user FCM token
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     if(userData.data() != null){
-      // document exists no action is necessary
+      // check if current token is valid
+      if(userData.data()['token'] == prefs.get('FCM_token')){
+        // document exists with valid token. no action is necessary
+        return;
+      }
+      // updating token to match currently used device
+      _firestore.collection('users').doc(user.uid).update({"token": prefs.get('FCM_token')});
       return;
     }
 
-    // get user FCM token
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
 
     final addData = {
       'language': 'pl',
       'location_id': 'SGzpuhHAIrTPWJJdRnli',
-      'tokens' : [prefs.get('FCM_token')]
+      'token' : prefs.get('FCM_token')
     };
 
     // add user document to database
