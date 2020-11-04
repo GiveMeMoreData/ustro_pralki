@@ -1,16 +1,24 @@
-# ustropralki
+# UstroPralki 0.1.2  :cyclone: :zap: :cyclone:
 
-Ustro Pralki Flutter Mobile App
+Welcome to the home respository of the **UstroPralki** project.  
+Our goal if to provide a ease to each and every hard working WUT student living in dormatory.  
+Every day hundreds of student waste their essential time on checking if their public washing machine is avaialable to use.  
+We aid them in their struggle by providing an *Flutter Mobile App* that allows them to check if washing machines in their dormatory are currently fully functional and unused. 
 
-## Getting Started
+## URL to Google Store  :link:
+[click!](https://play.google.com/store/apps/details?id=pom.pomarancza.ustropralki)
 
-This project is a starting point for a Flutter application.
+## Changes in this update :star: :star: :star:
+* accounts
+* signing in with gmail
+* push notifications
+* system for reporting broken washing machines
 
-A few resources to get you started if this is your first Flutter project:
+## Upcoming changes  :100: :100: :100:
+* iOS release (greedy apple wants money) 
+* different types of devices
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Notes  :clipboard:
+If you have any suggestions for improving the app feel free to post an `issue` or message me directly.  
+If you want to build the app for yourself, just clone the directory :)  
+Feel free to modify the app to your liking  
