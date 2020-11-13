@@ -85,7 +85,7 @@ class CustomDrawer extends StatelessWidget{
                   Container(
                     alignment: AlignmentDirectional.centerStart,
                     child: AutoSizeText(
-                        "Wyloguj",
+                        AppLocalizations.of(context).translate('logout'),
                         maxLines: 1,
                         style: TextStyle(
                           fontSize: 24,

@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "663108879257-qlssm1mb878pvl4l649fcar1jhkle4n0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pom.pomarancza.ustropralki",
+            "certificate_hash": "f26f1fb55fdd8eb9870d921e7a0e8bf654ad6e79"
+          }
+        },
+        {
+          "client_id": "663108879257-h5bdt252j88su5v5vbs0uqau5k09q6ed.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pom.pomarancza.ustropralki",
+            "certificate_hash": "b746c84e203e50b4d3db85b388785e62089d1d62"
+          }
+        },
+        {
           "client_id": "663108879257-1ulg72bjde9qvoj37qkops0uh3d5sris.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
