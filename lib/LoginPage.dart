@@ -63,6 +63,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
     try{
       final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
       if (googleSignInAccount == null){
+
         return;
       }
 

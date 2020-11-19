@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ustropralki/LoginPage.dart';
+import 'package:ustropralki/ProfilePage.dart';
 import 'package:ustropralki/QRScan.dart';
 import 'package:ustropralki/templates/DevicesSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         "/" : (context) => LoadingPage(),
         "/home": (context) => MyHomePage(),
         "/scan" : (context) => QRScan(),
+        "/profile" : (context) => ProfilePage(),
         "/login/google" : (context) => GoogleLogin(),
       },
     );

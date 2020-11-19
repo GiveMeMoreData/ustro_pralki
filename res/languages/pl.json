@@ -25,6 +25,8 @@
   "report_broken": "Czy na pewno chcesz zgłosić awarię tej pralki?",
   "login_text": "Zaloguj się żeby skorzystać z nowych funkcji Ustro Pralek!",
   "logout": "Wyloguj",
+  "settings": "Ustawienia",
+  "profile": "Profil",
   "login_text_info": "Spokojnie, logowanie z Google służy tylko do stworzenia konta użytkownika. Twoje dane są bezpieczne ;)",
   "login_with_google": "Logowanie z Google"
 }

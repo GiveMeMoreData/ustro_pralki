@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ustropralki/LoginPage.dart';
+import 'package:ustropralki/ProfilePage.dart';
 import 'package:ustropralki/templates/localization.dart';
 
 class CustomDrawer extends StatelessWidget{
@@ -62,6 +63,43 @@ class CustomDrawer extends StatelessWidget{
             height: 40,
           ),
 
+
+          // user's profile
+          GestureDetector(
+            onTap: (){
+              Navigator.of(context).pushNamed(ProfilePage.routeName);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.person_outline, size: 24, color: Theme.of(context).accentColor,),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Container(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: AutoSizeText(
+                        AppLocalizations.of(context).translate('profile'),
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.black ,
+                        )
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // spacer
+          SizedBox(
+            height: 20,
+          ),
+
           // log out button
           GestureDetector(
             onTap: (){
@@ -76,7 +114,7 @@ class CustomDrawer extends StatelessWidget{
                 children: <Widget>[
                   SvgPicture.asset(
                     "res/logout.svg",
-                    height: 26,
+                    height: 24,
                     color: Theme.of(context).accentColor,
                   ),
                   SizedBox(
@@ -98,6 +136,7 @@ class CustomDrawer extends StatelessWidget{
               ),
             ),
           ),
+
         ],
       ),
     );

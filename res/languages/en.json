@@ -25,6 +25,8 @@
   "report_broken": "Are you sure you want to report this device as broken?",
   "login_text": "Login to explore new functions of Ustro Pralki!",
   "logout": "Log out",
+  "settings": "Settings",
+  "profile": "Profile",
   "login_text_info": "Chill, signing in with Google only allows us to distinguish you from others. Your data is secure :) ",
   "login_with_google": "Login with Google"
 }
