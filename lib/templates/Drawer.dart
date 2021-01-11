@@ -103,7 +103,7 @@ class CustomDrawer extends StatelessWidget{
           // log out button
           GestureDetector(
             onTap: (){
-              Navigator.of(context).pop();
+              Navigator.of(context).popUntil((route) => Navigator.of(context).canPop());
               FirebaseAuth.instance.signOut();
               Navigator.of(context).pushReplacementNamed(GoogleLogin.routeName);
             },
