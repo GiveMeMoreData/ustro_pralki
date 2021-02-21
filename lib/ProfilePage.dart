@@ -1,11 +1,15 @@
-
-
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ustropralki/HomePage.dart';
+import 'package:ustropralki/Widgets/SelectableTile.dart';
+import 'package:ustropralki/Widgets/Tile.dart';
 import 'package:ustropralki/templates/AppBar.dart';
-import 'package:ustropralki/templates/Drawer.dart';
+import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
+
+import 'Widgets/Texts.dart';
 
 class ProfilePage extends StatefulWidget{
   static const routeName = '/profile';
@@ -17,68 +21,38 @@ class ProfilePage extends StatefulWidget{
 
 class _ProfilePageState extends State<ProfilePage>{
 
+  final UstroUserBase _user = UstroUserState();
 
- void showChangeLanguageDialog() {
-   showGeneralDialog(
-       context: context,
-       pageBuilder: (context, anim1, anim2) {return;},
-       barrierDismissible: true,
-       barrierColor: Colors.white.withOpacity(0.1),
-       barrierLabel: '',
-       transitionBuilder: (context, anim1, anim2, child) {
-         final curvedValue = Curves.easeInOut.transform(anim1.value)- 1.0;
-         return Transform(
-           transform: Matrix4.translationValues(0, curvedValue*200, 0),
-           child: Opacity(
-             opacity: anim1.value,
-             child: Dialog(
-               elevation: 30,
-               backgroundColor: Colors.transparent,
-               shape: OutlineInputBorder(
-                 borderRadius: BorderRadius.circular(25),
-                 borderSide: BorderSide.none,
-               ),
-               child: Container(
-                 alignment: AlignmentDirectional.center,
-                 width: MediaQuery.of(context).size.width*0.9,
-                 height: MediaQuery.of(context).size.height*0.25,
-                 decoration: BoxDecoration(
-                   borderRadius: BorderRadius.circular(25),
-                   color: Colors.white,
-                 ),
-                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.center,
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: <Widget>[
-                     Padding(
-                       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                       child: Text(
-                         AppLocalizations.of(context).translate('qr_search_fail'),
-                         textAlign: TextAlign.center,
-                         style: TextStyle(
-                           fontWeight: FontWeight.w300,
-                           fontSize: 22,
-                           color: Colors.black87,
-                         ),
-                       ),
-                     ),
-                   ],
-                 ),
-               ),
-             ),
-           ),
-         );
+  void onChangeDorm() {
+    Navigator.of(context).pushNamed(DormSelection.routeName, arguments:
+    SelectionArguments(
+        AppLocalizations.of(context).translate("save"),
+      (locationId) => {
+        _user.updateLocation(locationId),
+        Navigator.of(context).pop(),
+        Navigator.of(context).setState(() {}),
+      },
+      selectionArgument: _user.user.locationId
+    ));
+  }
+
+ void onChangeLanguage() {
+   Navigator.of(context).pushNamed(LanguageSelection.routeName, arguments:
+   SelectionArguments(
+       AppLocalizations.of(context).translate("save"),
+           (language) => {
+         _user.updateLanguage(language, context),
+             Navigator.of(context).popUntil((route) => route.isFirst),
+             Navigator.of(context).pushReplacementNamed(MyHomePage.routeName),
+             Navigator.of(context).pushNamed(ProfilePage.routeName)
        },
-       transitionDuration: Duration(milliseconds: 400)
-   );
+       selectionArgument: _user.user.language
+   ));
  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: CustomDrawer(),
-        drawerScrimColor: Colors.black26,
-        drawerEdgeDragWidth: 100,
         appBar: CustomAppBar("Ustro Pralki", elevation: 10.0, callback: setState,),
         body: Container(
           color: Theme.of(context).backgroundColor,
@@ -90,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage>{
               Padding(
                 padding: const EdgeInsets.fromLTRB(25,25,25,15),
                 child: NormalText(
-                  "Ustawienia konta:", // TODO
+                  AppLocalizations.of(context).translate("account_settings"),
                   fontSize: 24,
                   color: Colors.grey,
                   fontWeight: FontWeight.w300,
@@ -103,13 +77,13 @@ class _ProfilePageState extends State<ProfilePage>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     NormalText(
-                      "Twoje konto:",
+                      AppLocalizations.of(context).translate("your_account"),
                     ),
                     SizedBox(
                       height: 12,
                     ),
                     NormalText(
-                        "asas@asasas",
+                        _user.user.email,
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
                     )
@@ -123,10 +97,10 @@ class _ProfilePageState extends State<ProfilePage>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         NormalText(
-                          "Typ konta:"
+                            AppLocalizations.of(context).translate("account_type")
                         ),
                         NormalText(
-                          "Mieszkaniec",
+                          "Mieszkaniec", // TODO
                           fontSize: 16,
                           fontWeight: FontWeight.w300,
                         )
@@ -136,14 +110,34 @@ class _ProfilePageState extends State<ProfilePage>{
                 ),
               ),
               Tile(
-                callback: showChangeLanguageDialog,
+                callback: onChangeLanguage,
                 child: Column(
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         NormalText(
-                            "Zmień język",
+                            AppLocalizations.of(context).translate("change_lang")
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 24,
+                          color: Theme.of(context).accentColor,
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Tile(
+                callback: onChangeDorm,
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        NormalText(
+                            AppLocalizations.of(context).translate("change_dorm")
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,
@@ -162,12 +156,18 @@ class _ProfilePageState extends State<ProfilePage>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         NormalText(
-                            "Powiadomienia"
+                            AppLocalizations.of(context).translate("change_notifications")
                         ),
-                        Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 24,
-                          color: Theme.of(context).accentColor,
+                        Container(
+                          height: 20,
+                          child: Switch.adaptive(
+                              value: _user.user.FCMToken!=null,
+                              onChanged: (_value) => setState((){
+                                _user.updateNotifications(_value);
+                              }),
+                            activeColor: Theme.of(context).accentColor,
+                            inactiveTrackColor: Theme.of(context).accentColor.withOpacity(0.5),
+                          ),
                         )
                       ],
                     )
@@ -181,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         NormalText(
-                            "Wyloguj się"
+                            AppLocalizations.of(context).translate("logout")
                         ),
                         Icon(
                           Icons.power_settings_new,
@@ -203,65 +203,317 @@ class _ProfilePageState extends State<ProfilePage>{
 }
 
 
+class SelectionArguments{
 
-class Tile extends StatelessWidget{
-
-  const Tile({ this.child, this.callback, Key key}) : super(key: key);
+  final String bottomButtonText;
   final Function callback;
-  final Widget child;
+  final String selectionArgument;
+
+  SelectionArguments(this.bottomButtonText, this.callback, {this.selectionArgument});
+
+}
+
+class DormSelection extends StatefulWidget{
+  static const routeName ="/login/dorm";
+
+  @override
+  State<StatefulWidget> createState() => _DormSelectionState();
+
+}
+
+
+class _DormSelectionState extends State<DormSelection>{
+
+
+  SelectionArguments args;
+  int selected = -1;
+  List<QueryDocumentSnapshot> locations;
+
+  Future<void> getLocations() async {
+    if(locations == null){
+      final _locations = await FirebaseFirestore.instance.collection('locations').get();
+
+      locations =_locations.docs;
+      if(args != null && args.selectionArgument != null){
+        selected = locations.indexWhere((doc) => doc.id == args.selectionArgument);
+      }
+
+      setState(() {});
+    }
+  }
+
+  void loadArgs() {
+    if(args != null) {
+      return;
+    }
+    args = ModalRoute.of(context).settings.arguments;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLocations();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: InkWell(
-        onTap: callback,
+    loadArgs();
+    return Scaffold(
+      appBar: CustomAppBar(
+          "UstroPralki"
+      ),
+      body: SizedBox.expand(
         child: Container(
-          width: MediaQuery.of(context).size.width*0.9,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xFF989898).withOpacity(0.1),
-                spreadRadius: 5,
-                blurRadius: 10,
-                offset: Offset(0, 5), // changes position of shadow
+          color: Theme.of(context).backgroundColor,
+          alignment: AlignmentDirectional.center,
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+
+              Builder(
+                builder: (context){
+                  if(locations != null){
+                    return ListView(
+                      children: [
+
+                        ///
+                        /// header
+                        ///
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0,30,0,22),
+                            child: NormalText(
+                              AppLocalizations.of(context).translate("select_dorm"),
+                              fontSize: 24,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ),
+
+                        ListView.builder(
+                          physics: ScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: locations.length+1,
+                          itemBuilder: (context, index){
+
+                            ///
+                            /// footer
+                            ///
+                            if(index==locations.length){
+                              return SizedBox(
+                                height: 90,
+                              );
+                            }
+                            ///
+                            /// list element
+                            ///
+                            return
+                              SelectableTile(
+                                selected: index == selected,
+                                leading:
+                                NormalText(
+                                  locations[index].data()['name'],
+                                ),
+                                onTap: (){
+                                  setState(() {
+                                    index == selected? selected = -1 : selected = index;
+                                  });
+                                },
+                                trailing: SizedBox(
+                                  height: 28,
+                                  child: Visibility(
+                                    visible: selected==index,
+                                    child: SvgPicture.asset(
+                                      "res/check.svg",
+                                      height: 28,
+                                    ),
+                                  ),
+                                ),
+                              );
+                          },
+                        )
+                      ],
+                    );
+
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              Positioned(
+                bottom: 20,
+                child: Material(
+                  borderRadius: BorderRadius.circular(40),
+                  color: selected == -1? Theme.of(context).disabledColor : Theme.of(context).accentColor,
+                  elevation: selected == -1? 0 : 10,
+                  shadowColor: Color(0xAAFF6600),
+                  animationDuration: Duration(milliseconds: 700),
+                  child: InkWell(
+                    onTap: () {
+                      if( selected != -1){
+                        args.callback(locations[selected].id);
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(40),
+                    splashColor: Colors.black,
+                    child: Container(
+                      alignment: AlignmentDirectional.center,
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                      child: Text(
+                        args.bottomButtonText,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               )
-            ]
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-            child: child,
+            ],
           ),
         ),
       ),
     );
   }
+
+}
+
+class LanguageSelection extends StatefulWidget{
+  static const routeName = "/login/language";
+
+  @override
+  State<StatefulWidget> createState() => _LanguageSelectionState();
 }
 
 
+class _LanguageSelectionState extends State<LanguageSelection>{
 
-class NormalText extends StatelessWidget{
+  int selected = -1;
 
-  NormalText(this.text,{this.fontSize = 18, this.color = const Color(0xFF484848), this.fontWeight = FontWeight.normal, Key key}) : super(key: key);
+  Map<String, String> _languages = {
+    "pl": "Polski",
+    "en": "English",
+  };
 
-  final String text;
-  final double fontSize;
-  final Color color;
-  final FontWeight fontWeight;
+  SelectionArguments args;
+
+  void loadArgs() {
+    if(args != null) {
+      return;
+    }
+    args = ModalRoute.of(context).settings.arguments;
+
+    if(args != null && args.selectionArgument != null){
+      selected = _languages.keys.toList().indexWhere((lang) => lang == args.selectionArgument);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-        fontSize: fontSize,
-        color: color,
-        fontWeight: fontWeight,
+    loadArgs();
+    return Scaffold(
+      appBar: CustomAppBar(
+          "UstroPralki"
+      ),
+      body: SizedBox.expand(
+        child: Container(
+          color: Theme.of(context).backgroundColor,
+          alignment: AlignmentDirectional.center,
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+
+              ListView(
+                children: [
+
+                  ///
+                  /// header
+                  ///
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0,30,0,22),
+                      child: NormalText(
+                        AppLocalizations.of(context).translate("select_lang"),
+                        fontSize: 24,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+
+                  ListView.builder(
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: _languages.length+1,
+                    itemBuilder: (context, index){
+
+                      ///
+                      /// footer
+                      ///
+                      if(index==_languages.length){
+                        return SizedBox(
+                          height: 90,
+                        );
+                      }
+                      ///
+                      /// list element
+                      ///
+                      return
+                        SelectableTile(
+                          selected: index == selected,
+                          leading: NormalText(
+                            _languages.values.toList()[index],
+                          ),
+                          onTap: (){
+                            setState(() {
+                              index == selected? selected = -1 : selected = index;
+                            });
+                          },
+                        );
+                    },
+                  )
+                ],
+              ),
+              Positioned(
+                bottom: 20,
+                child: Material(
+                  borderRadius: BorderRadius.circular(40),
+                  animationDuration: Duration(milliseconds: 500),
+                  color: selected == -1? Theme.of(context).disabledColor : Theme.of(context).accentColor,
+                  elevation: selected == -1? 0 : 10,
+                  shadowColor: Color(0xAAFF6600),
+                  child: InkWell(
+                    onTap: () {
+                      if(selected != -1){
+                        args.callback(_languages.keys.toList()[selected]);
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(40),
+                    splashColor: Colors.black,
+                    child: Container(
+                      alignment: AlignmentDirectional.center,
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                      child: Text(
+                        args.bottomButtonText,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
-  }
 
+  }
 
 }

@@ -5,11 +5,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ustropralki/HomePage.dart';
 import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/ProfilePage.dart';
 import 'package:ustropralki/templates/localization.dart';
 
-class CustomDrawer extends StatelessWidget{
+
+class CustomDrawer extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => _CustomDrawerState();
+
+}
+
+
+
+class _CustomDrawerState extends State<CustomDrawer>{
 
   final User user = FirebaseAuth.instance.currentUser;
 
@@ -67,19 +77,24 @@ class CustomDrawer extends StatelessWidget{
           // user's profile
           GestureDetector(
             onTap: (){
-              Navigator.of(context).pushNamed(ProfilePage.routeName);
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.of(context).popAndPushNamed(ProfilePage.routeName);
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Icon(Icons.person_outline, size: 24, color: Theme.of(context).accentColor,),
+                  Container(
+                    width: 60,
+                    alignment: Alignment.center,
+                    child: Icon(Icons.person_outline_rounded , size: 32, color: Theme.of(context).accentColor,)
+                  ),
                   SizedBox(
                     width: 20,
                   ),
                   Container(
-                    alignment: AlignmentDirectional.centerStart,
+                    alignment: Alignment.centerLeft,
                     child: AutoSizeText(
                         AppLocalizations.of(context).translate('profile'),
                         maxLines: 1,
@@ -108,14 +123,18 @@ class CustomDrawer extends StatelessWidget{
               Navigator.of(context).pushReplacementNamed(GoogleLogin.routeName);
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SvgPicture.asset(
-                    "res/logout.svg",
-                    height: 24,
-                    color: Theme.of(context).accentColor,
+                  Container(
+                    width: 60,
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      "res/logout.svg",
+                      height: 28,
+                      color: Theme.of(context).accentColor,
+                    ),
                   ),
                   SizedBox(
                     width: 20,

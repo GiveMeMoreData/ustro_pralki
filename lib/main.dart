@@ -7,8 +7,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/ProfilePage.dart';
-import 'package:ustropralki/QRScan.dart';
 import 'package:ustropralki/templates/DevicesSingleton.dart';
+import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'HomePage.dart';
@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xFFE55900),
         primarySwatch: Colors.red,
+        disabledColor: Color(0xFFffb080),
         backgroundColor: Color(0xFFF9F3EE),
         accentColor: Color(0xFFE55900),
         textTheme: TextTheme( headline1: TextStyle(
@@ -48,9 +49,10 @@ class MyApp extends StatelessWidget {
       routes: {
         "/" : (context) => LoadingPage(),
         "/home": (context) => MyHomePage(),
-        "/scan" : (context) => QRScan(),
         "/profile" : (context) => ProfilePage(),
         "/login/google" : (context) => GoogleLogin(),
+        "/login/dorm" : (context) => DormSelection(),
+        "/login/language" : (context) =>LanguageSelection(),
       },
     );
   }
@@ -61,6 +63,7 @@ class LoadingPage extends StatelessWidget{
   bool _dataLoaded = false;
 
   final DevicesInfoBase devices = DevicesInfoState();
+  final UstroUserBase ustroUser = UstroUserState();
 
 
   Future<void> initializeApp(BuildContext context) async {
@@ -115,6 +118,8 @@ class LoadingPage extends StatelessWidget{
     if (currentUser == null){
       Navigator.pushReplacementNamed(context, GoogleLogin.routeName);
     } else {
+      ustroUser.restart();
+      await ustroUser.loadUserFromFirebaseAuthUser(currentUser);
       loadData(context);
     }
   }

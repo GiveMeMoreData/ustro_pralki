@@ -28,5 +28,15 @@
   "settings": "Ustawienia",
   "profile": "Profil",
   "login_text_info": "Spokojnie, logowanie z Google służy tylko do stworzenia konta użytkownika. Twoje dane są bezpieczne ;)",
-  "login_with_google": "Logowanie z Google"
+  "login_with_google": "Logowanie z Google",
+  "account_settings": "Ustawienia konta",
+  "your_account": "Twoje konto",
+  "account_type": "Typ konta",
+  "change_lang":"Zmień język",
+  "select_lang": "Wybierz język",
+  "change_dorm": "Zmień akademik",
+  "select_dorm": "Wybierz swój akademik",
+  "change_notifications": "Powiadomienia",
+  "save": "Zapisz"
+
 }

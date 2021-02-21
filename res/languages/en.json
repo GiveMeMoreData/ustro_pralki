@@ -28,5 +28,14 @@
   "settings": "Settings",
   "profile": "Profile",
   "login_text_info": "Chill, signing in with Google only allows us to distinguish you from others. Your data is secure :) ",
-  "login_with_google": "Login with Google"
+  "login_with_google": "Login with Google",
+  "account_settings": "Account settings",
+  "your_account": "Your account",
+  "account_type": "Account type",
+  "change_lang": "Language",
+  "select_lang": "Select language",
+  "change_dorm": "Dormitory",
+  "select_dorm": "Select your dormitory",
+  "change_notifications": "Notifications",
+  "save": "Save"
 }

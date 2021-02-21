@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ustropralki/ProfilePage.dart';
 import 'package:ustropralki/templates/localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+
 
 
 class GoogleLogin extends StatefulWidget{
@@ -21,7 +23,8 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> checkIfUserInDatabase(User user) async {
+
+  Future<bool> checkIfUserInDatabase(User user) async {
 
     // check if document with user id exists in database
     final DocumentSnapshot userData = await _firestore.collection('users').doc(user.uid).get();
@@ -33,25 +36,68 @@ class _GoogleLoginState extends State<GoogleLogin>{
       // check if current token is valid
       if(userData.data()['token'] == prefs.get('FCM_token')){
         // document exists with valid token. no action is necessary
-        return;
+        return true;
       }
       // updating token to match currently used device
       _firestore.collection('users').doc(user.uid).update({"token": prefs.get('FCM_token')});
+      return true;
+    }
+
+    return false;
+  }
+
+  void createNewAccount(User user) async {
+
+    String _newUserLocation;
+    String _newUserLanguage;
+
+    // get user FCM token
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // New user
+    await Navigator.of(context).pushNamed(DormSelection.routeName, arguments:
+    SelectionArguments(
+        "Dalej",
+            (locationId) => {
+              _newUserLocation = locationId
+        }));
+
+    if(_newUserLocation == null){
       return;
     }
 
+    await Navigator.of(context).pushNamed(LanguageSelection.routeName, arguments:
+    SelectionArguments("Dalej", (language) => {
+      _newUserLanguage = language,
+    }));
+
+    if(_newUserLanguage == null){
+      return;
+    }
+
+    Navigator.of(context).popUntil((route) => route.settings.name == GoogleLogin.routeName);
+    addUserIfPossible(user.uid, _newUserLocation, _newUserLanguage, prefs.get('FCM_token'));
+  }
+
+  void addUserIfPossible(String userId, String locationId, String language, String token){
+
+    if(locationId == null || locationId ==""){
+      print("Missing locationId data. User could not be added");
+    }
+    if(language == null || language ==""){
+      print("Missing language data. User could not be added");
+    }
 
 
     final addData = {
-      'language': 'pl',
-      'location_id': 'SGzpuhHAIrTPWJJdRnli',
-      'token' : prefs.get('FCM_token')
+      'language': language,
+      'location_id': locationId,
+      'token' : token
     };
 
     // add user document to database
     // key has to be unique because user id is unique
-    _firestore.collection('users').doc(user.uid).set(addData);
-
+    _firestore.collection('users').doc(userId).set(addData);
 
   }
 
@@ -87,12 +133,17 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
 
       // check if user exists in database
-      await checkIfUserInDatabase(currentUser);
+      if(await checkIfUserInDatabase(currentUser)){
+        print("Signed in ${currentUser.displayName}, userId: ${currentUser.uid}");
+        Navigator.pushReplacementNamed(context, "/");
+      } else {
+        // New user
 
-      print("Signed in ${currentUser.displayName}, userId: ${currentUser.uid}");
-      Navigator.pushReplacementNamed(context, "/");
+      }
+
 
     } catch (e) {
+      FirebaseAuth.instance.signOut();
       print(e);
     }
   }
@@ -206,4 +257,3 @@ class _GoogleLoginState extends State<GoogleLogin>{
     );
   }
 }
-

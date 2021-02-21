@@ -10,9 +10,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
   final String title;
   final double elevation;
   final double height;
+  final bool languageWidgetEnabled;
   Function callback;
 
-  CustomAppBar(this.title, {this.elevation = 2, this.height = kToolbarHeight, this.callback});
+  CustomAppBar(this.title, {this.elevation = 2, this.height = kToolbarHeight, this.callback, this.languageWidgetEnabled = false});
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -30,7 +31,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
         ),
       ),
       actions: <Widget>[
-        LanguageWidget(callback: callback,),
+        Visibility(
+          visible: languageWidgetEnabled,
+          child: LanguageWidget(callback: callback,),
+        ),
       ],
       backgroundColor: Colors.white,
       titleSpacing: 10,
