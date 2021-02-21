@@ -15,6 +15,8 @@ import 'templates/DevicesSingleton.dart';
 
 class MyHomePage extends StatefulWidget {
 
+  static const routeName = "/home";
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -910,7 +912,8 @@ class _DeviceListTileState extends State<DeviceListTile>{
         elevation: 5,
         shadowColor: Color(0x2a989898),
         child: InkWell(
-          splashColor: Theme.of(context).accentColor,
+          splashColor: Theme.of(context).accentColor.withOpacity(0.5),
+          highlightColor: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           onTap: (){
           },
@@ -1003,9 +1006,6 @@ class _DeviceListTileState extends State<DeviceListTile>{
                               ),
                             ],
                           ),
-
-
-
                       ],
                     ),
                   ),
