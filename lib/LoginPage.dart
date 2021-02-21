@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ustropralki/ProfilePage.dart';
+import 'package:ustropralki/templates/DevicesSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -22,6 +23,7 @@ class GoogleLogin extends StatefulWidget{
 class _GoogleLoginState extends State<GoogleLogin>{
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final DevicesInfoBase devices = DevicesInfoState();
 
 
   Future<bool> checkIfUserInDatabase(User user) async {
@@ -135,6 +137,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
       // check if user exists in database
       if(await checkIfUserInDatabase(currentUser)){
         print("Signed in ${currentUser.displayName}, userId: ${currentUser.uid}");
+        devices.restart();
         Navigator.pushReplacementNamed(context, "/");
       } else {
         // New user

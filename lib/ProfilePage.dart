@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ustropralki/HomePage.dart';
+import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/Widgets/SelectableTile.dart';
 import 'package:ustropralki/Widgets/Tile.dart';
 import 'package:ustropralki/templates/AppBar.dart';
+import 'package:ustropralki/templates/DevicesSingleton.dart';
 import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 
@@ -22,15 +25,18 @@ class ProfilePage extends StatefulWidget{
 class _ProfilePageState extends State<ProfilePage>{
 
   final UstroUserBase _user = UstroUserState();
+  final DevicesInfoBase devices = DevicesInfoState();
 
   void onChangeDorm() {
     Navigator.of(context).pushNamed(DormSelection.routeName, arguments:
     SelectionArguments(
         AppLocalizations.of(context).translate("save"),
       (locationId) => {
+        devices.restart(),
         _user.updateLocation(locationId),
-        Navigator.of(context).pop(),
-        Navigator.of(context).setState(() {}),
+        Navigator.of(context).popUntil((route) => route.isFirst),
+        Navigator.of(context).pushReplacementNamed(MyHomePage.routeName),
+        Navigator.of(context).pushNamed(ProfilePage.routeName)
       },
       selectionArgument: _user.user.locationId
     ));
@@ -48,6 +54,13 @@ class _ProfilePageState extends State<ProfilePage>{
        },
        selectionArgument: _user.user.language
    ));
+ }
+
+
+ void onLogOut(){
+   Navigator.of(context).popUntil((route) => route.isFirst);
+   FirebaseAuth.instance.signOut();
+   Navigator.of(context).pushReplacementNamed(GoogleLogin.routeName);
  }
 
   @override
@@ -175,6 +188,7 @@ class _ProfilePageState extends State<ProfilePage>{
                 ),
               ),
               Tile(
+                callback: onLogOut,
                 child: Column(
                   children: <Widget>[
                     Row(

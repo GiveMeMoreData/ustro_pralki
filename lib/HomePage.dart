@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/countdown_timer.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 
 import 'templates/AppBar.dart';
@@ -25,6 +26,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final User _user = FirebaseAuth.instance.currentUser;
 
+  final UstroUserBase user = UstroUserState();
+
   final DevicesInfoBase devices = DevicesInfoState();
   TimeOfDay _endTime = TimeOfDay(hour: 1, minute: 0);
 
@@ -41,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   void listenForFirebaseChange() async {
-    FirebaseFirestore.instance.collection('devices').snapshots().listen((data) {
+    FirebaseFirestore.instance.collection('devices').where("location", isEqualTo: user.user.locationId).snapshots().listen((data) {
       devices.updateDevicesFromChangesList(data.docChanges);
       if(mounted){
         setState(() {

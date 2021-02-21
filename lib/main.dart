@@ -158,7 +158,8 @@ class LoadingPage extends StatelessWidget{
       AppLocalizations.of(context).loadNewLocale(Locale(prefs.getString('language'), ''));
     }
 
-    final devicesList = await FirebaseFirestore.instance.collection('devices').get();
+    final devicesList = await FirebaseFirestore.instance.collection('devices').where("location", isEqualTo: ustroUser.user.locationId).get();
+    devices.restart();
     devices.setDeviceListFromDocumentSnapshotList(devicesList.docs);
     Navigator.of(context).pushReplacementNamed("/home");
   }

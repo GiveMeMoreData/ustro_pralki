@@ -37,8 +37,6 @@ abstract class DevicesInfoBase{
   @protected
   Map<String,Device> deviceMap;
 
-  @protected
-  Map<String,Device> initialDeviceMap;
 
   void useDevice(String deviceId, String userId, Timestamp endTime){
     deviceMap[deviceId].setAvailable(false);
@@ -69,7 +67,7 @@ abstract class DevicesInfoBase{
   }
 
   void updateDeviceInFirestore(String deviceId, Map<String, dynamic> updateData){
-    Firestore.instance.collection('devices').doc(deviceId).set(updateData,SetOptions(merge: true));
+    FirebaseFirestore.instance.collection('devices').doc(deviceId).set(updateData,SetOptions(merge: true));
     print("[INFO] Update for $deviceId send");
   }
 
@@ -154,7 +152,7 @@ abstract class DevicesInfoBase{
   }
 
   void restart() {
-    deviceMap = initialDeviceMap;
+    deviceMap = {};
   }
 }
 
@@ -166,7 +164,6 @@ class DevicesInfoState extends DevicesInfoBase {
   }
 
   DevicesInfoState._internal() {
-    initialDeviceMap = {};
-    deviceMap = initialDeviceMap;
+    deviceMap = {};
   }
 }

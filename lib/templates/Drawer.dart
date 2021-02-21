@@ -118,7 +118,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
           // log out button
           GestureDetector(
             onTap: (){
-              Navigator.of(context).popUntil((route) => Navigator.of(context).canPop());
+              Navigator.of(context).popUntil((route) => route.isFirst);
               FirebaseAuth.instance.signOut();
               Navigator.of(context).pushReplacementNamed(GoogleLogin.routeName);
             },
