@@ -26,6 +26,7 @@
   "login_text": "Zaloguj się żeby skorzystać z nowych funkcji Ustro Pralek!",
   "logout": "Wyloguj",
   "settings": "Ustawienia",
+  "admin": "Panel admina",
   "profile": "Profil",
   "login_text_info": "Spokojnie, logowanie z Google służy tylko do stworzenia konta użytkownika. Twoje dane są bezpieczne ;)",
   "login_with_google": "Logowanie z Google",
@@ -37,6 +38,24 @@
   "change_dorm": "Zmień akademik",
   "select_dorm": "Wybierz swój akademik",
   "change_notifications": "Powiadomienia",
-  "save": "Zapisz"
+  "save": "Zapisz",
+  "all_admins": "Administracja",
+  "add_admin": "Dodaj admina",
+  "add_device": "Dodaj urządzenie",
+  "privileges" : "Moje uprawnienia",
+  "inhabitant_role" : "Mieszkaniec",
+  "admin_role": "Administrator",
+  "device_name": "Nazwa urządzenia",
+  "users_email": "Email użytkownika",
+  "create": "Stwórz",
+  "add": "Dodaj",
+  "privilege_add_device": "Dodawanie nowych urządzeń",
+  "privilege_add_device_text" : "Każdy administrator może stworzyć nowe urządzenie w akademiku do którego należy. Będzie one od razu widoczne dla wszystkich mieszkańców akademika. W obecnej wersji aplikacji urządzeniu nadawana jest jedna nazwa. Przez to zalecane jest nadawanie takich nazw, które chociaż w części mogą być zrozumiane przez użytkowników nie rozumiejących polskiego np. 'Pralka 2' zamiast 'Pralka druga.",
+  "privilege_edit_device" : "Edycja urządzeń",
+  "privilege_edit_device_text" : "Administratorzy mają pełną kontrolę nad urządzeniami. Mogą oni edytować ich nazwy, wyłączyć je w razie awarii oraz usuwać jeżeli istnieje taka potrzeba. Widoczne jest dla nich ID urządzenia które jest bezpośrednio użyte do tworzenia kodów QR. Wszystkie te opcje są dostępne po kliknięciu i przytrzymaniu urządzenia w panelu głównym aplikacji.",
+  "privilege_add_admin" : "Dodawanie administratorów",
+  "privilege_add_admin_text" : "Jednym z zadań administracji jest samoorganizacja. Oznacza to, że tylko wy zarządzacie kto ma uprawnienia administratora w waszym akademiku, tzn możecie jest nadać i zabrać każdemu użytkownikowi. ",
+  "privilege_improvement" : "Rozwój aplikacji",
+  "privilege_improvement_text" : "Jesteście grupą, która najlepiej dostrzega wady tej aplikacji. Jest ona tworzona przez studentów dla studentów, dlatego jako deweloperzy zachęcamy do kontakotowania się z nami w celu zgłoszania błędów w aplikacji, dzielenia się pomysłami na dalszy jej rozwój, bądź przekazania jakiegokolwiek feedbacku jaki uznacie za stosowny."
 
 }

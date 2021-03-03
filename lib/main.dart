@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ustropralki/AdminPage.dart';
+import 'package:ustropralki/DeviceDetailsPage.dart';
 import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/ProfilePage.dart';
 import 'package:ustropralki/templates/DevicesSingleton.dart';
@@ -49,7 +51,12 @@ class MyApp extends StatelessWidget {
       routes: {
         "/" : (context) => LoadingPage(),
         "/home": (context) => MyHomePage(),
+        "/home/device_details": (context) => DeviceDetailsPage(),
         "/profile" : (context) => ProfilePage(),
+        "/admin" : (context) => AdminPage(),
+        "/admin/add_device" : (context) => AddDevicePage(),
+        "/admin/add_admin" : (context) => AddAdminPage(),
+        "/admin/privileges" : (context) => MyPrivilegesPage(),
         "/login/google" : (context) => GoogleLogin(),
         "/login/dorm" : (context) => DormSelection(),
         "/login/language" : (context) =>LanguageSelection(),
@@ -120,6 +127,7 @@ class LoadingPage extends StatelessWidget{
     } else {
       ustroUser.restart();
       await ustroUser.loadUserFromFirebaseAuthUser(currentUser);
+      await ustroUser.checkIfAdmin();
       loadData(context);
     }
   }

@@ -66,6 +66,19 @@ abstract class DevicesInfoBase{
     updateDeviceInFirestore(deviceId, updateData);
   }
 
+  void createDevice(String name, String locationId){
+    final deviceData = {
+      "name" : name,
+      "location": locationId,
+      "available": true,
+      "enabled": true,
+      "current_user_id": null,
+      "end_time": null,
+      "messaging_task_id": null,
+    };
+    FirebaseFirestore.instance.collection('devices').add(deviceData);
+  }
+
   void updateDeviceInFirestore(String deviceId, Map<String, dynamic> updateData){
     FirebaseFirestore.instance.collection('devices').doc(deviceId).set(updateData,SetOptions(merge: true));
     print("[INFO] Update for $deviceId send");

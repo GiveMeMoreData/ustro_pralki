@@ -60,6 +60,7 @@ class _ProfilePageState extends State<ProfilePage>{
  void onLogOut(){
    Navigator.of(context).popUntil((route) => route.isFirst);
    FirebaseAuth.instance.signOut();
+   _user.restart();
    Navigator.of(context).pushReplacementNamed(GoogleLogin.routeName);
  }
 
@@ -113,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage>{
                             AppLocalizations.of(context).translate("account_type")
                         ),
                         NormalText(
-                          "Mieszkaniec", // TODO
+                          _user.user.isAdmin? AppLocalizations.of(context).translate("admin_role") : AppLocalizations.of(context).translate("inhabitant_role"),
                           fontSize: 16,
                           fontWeight: FontWeight.w300,
                         )

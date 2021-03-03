@@ -5,9 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ustropralki/AdminPage.dart';
 import 'package:ustropralki/HomePage.dart';
 import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/ProfilePage.dart';
+import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 
 
@@ -21,7 +23,51 @@ class CustomDrawer extends StatefulWidget{
 
 class _CustomDrawerState extends State<CustomDrawer>{
 
-  final User user = FirebaseAuth.instance.currentUser;
+  final UstroUserBase user = UstroUserState();
+
+  Widget adminPanelWidget(bool isAdmin){
+    if (!isAdmin) {
+      // draw nothing
+      return Container();
+    }
+
+    return GestureDetector(
+      onTap: (){
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(context).popAndPushNamed(AdminPage.routeName);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+                width: 60,
+                alignment: Alignment.center,
+                child: Icon(Icons.build_outlined, size: 32, color: Theme.of(context).accentColor,)
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: AutoSizeText(
+                  AppLocalizations.of(context).translate('admin'),
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.black ,
+                  )
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +156,14 @@ class _CustomDrawerState extends State<CustomDrawer>{
             ),
           ),
 
+          if(user.user.isAdmin)
+            SizedBox(
+              height: 20,
+            ),
+
+
+          adminPanelWidget(user.user.isAdmin),
+
           // spacer
           SizedBox(
             height: 20,
@@ -120,6 +174,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
             onTap: (){
               Navigator.of(context).popUntil((route) => route.isFirst);
               FirebaseAuth.instance.signOut();
+              user.restart();
               Navigator.of(context).pushReplacementNamed(GoogleLogin.routeName);
             },
             child: Padding(

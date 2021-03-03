@@ -20,6 +20,8 @@ class UstroUser{
   @protected
   // ignore: non_constant_identifier_names
   String FCMToken;
+  @protected
+  bool isAdmin;
 
   void setId(String newId){
     id = newId;
@@ -39,8 +41,12 @@ class UstroUser{
   void setFCMToken(String newFCMToken){
     FCMToken = newFCMToken;
   }
+  void setIsAdmin(bool newIsAdmin){
+    isAdmin = newIsAdmin;
+  }
 
-  UstroUser({this.id, this.email, this.name, this.language, this.locationId, this.FCMToken});
+  // ignore: non_constant_identifier_names
+  UstroUser({this.id, this.email, this.name, this.language, this.locationId, this.FCMToken, this.isAdmin = false});
 }
 
 
@@ -48,9 +54,6 @@ abstract class UstroUserBase{
 
   @protected
   UstroUser user;
-
-  @protected
-  UstroUser initialUser;
 
 
   Future<void> loadUserFromFirebaseAuthUser(User _user) async {
@@ -110,13 +113,38 @@ abstract class UstroUserBase{
     updateUserData(fieldName: "token", fieldNewValue: newToken);
   }
 
+  Future<void> checkIfAdmin() async {
+
+    // only if all conditions are met this will be true
+    user.isAdmin = false;
+
+    // location id has to be set
+    if(user == null || user.locationId == null || user.locationId == ""){
+      return;
+    }
+
+    final locationDocument = await FirebaseFirestore.instance.collection('locations').doc(user.locationId).get();
+    if(!locationDocument.data().containsKey("admin_user_id")){
+      // location document does not contain id's of admins
+      return;
+    }
+
+    if(locationDocument.data()["admin_user_id"].contains(user.id)){
+      print("User is admin of location ${user.locationId}");
+      user.isAdmin = true;
+    }
+
+  }
+
   void updateLocation(String newLocationId){
     if(newLocationId == user.locationId){
       return;
     }
     user.setLocationId(newLocationId);
     updateUserData(fieldName: "location_id", fieldNewValue: newLocationId);
+    checkIfAdmin();
   }
+
   void updateLanguage(String newLanguage, BuildContext context) async {
     if(newLanguage == user.language){
       return;
@@ -144,7 +172,7 @@ abstract class UstroUserBase{
   }
 
   void restart() {
-    user = initialUser;
+    user = UstroUser();
   }
 }
 
@@ -157,7 +185,6 @@ class UstroUserState extends UstroUserBase {
 
 
   UstroUserState._internal() {
-    initialUser = UstroUser();
-    user = initialUser;
+    user = UstroUser();
   }
 }
