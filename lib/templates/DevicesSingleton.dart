@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class Device{
 
   @protected
+  String id;
+  @protected
   String name;
   @protected
   bool enabled;
@@ -14,6 +16,9 @@ class Device{
   Timestamp endTime;
 
 
+  void setId(String newId){
+    id = newId;
+  }
 
   void setName(String newName) {
     name = newName;
@@ -28,7 +33,7 @@ class Device{
     endTime = newEndTime;
   }
 
-  Device(this.name, this.enabled, this.available, this.endTime);
+  Device(this.id, this.name, this.enabled, this.available, this.endTime);
 }
 
 
@@ -66,7 +71,7 @@ abstract class DevicesInfoBase{
     updateDeviceInFirestore(deviceId, updateData);
   }
 
-  void createDevice(String name, String locationId){
+  Future<void> createDevice(String name, String locationId) async {
     final deviceData = {
       "name" : name,
       "location": locationId,
@@ -76,7 +81,7 @@ abstract class DevicesInfoBase{
       "end_time": null,
       "messaging_task_id": null,
     };
-    FirebaseFirestore.instance.collection('devices').add(deviceData);
+    await FirebaseFirestore.instance.collection('devices').add(deviceData);
   }
 
   void updateDeviceInFirestore(String deviceId, Map<String, dynamic> updateData){
@@ -101,6 +106,7 @@ abstract class DevicesInfoBase{
   }
 
   void updateDeviceFromDocumentSnapshot(DocumentSnapshot deviceChange){
+    deviceMap[deviceChange.id].setId(deviceChange.id);
     deviceMap[deviceChange.id].setName(deviceChange.get('name'));
     deviceMap[deviceChange.id].setAvailable(deviceChange.get('available'));
     deviceMap[deviceChange.id].setEnabled(deviceChange.get('enabled'));
@@ -113,6 +119,7 @@ abstract class DevicesInfoBase{
     final _deviceEndTime = newDevice.get('end_time');
     if(_deviceEndTime == null || _timeNow<_deviceEndTime.seconds){
       deviceMap.putIfAbsent(newDevice.id, () => Device(
+        newDevice.id,
         newDevice.get('name'),
         newDevice.get('enabled'),
         newDevice.get('available'),
@@ -120,6 +127,7 @@ abstract class DevicesInfoBase{
       ));
     } else {
       deviceMap.putIfAbsent(newDevice.id, () => Device(
+        newDevice.id,
         newDevice.get('name'),
         newDevice.get('enabled'),
         true,
@@ -141,6 +149,7 @@ abstract class DevicesInfoBase{
       final _deviceEndTime = device.get('end_time');
       if(_deviceEndTime == null || _timeNow<_deviceEndTime.seconds){
         deviceMap.putIfAbsent(device.id, () => Device(
+          device.id,
           device.get('name'),
           device.get('enabled'),
           device.get('available'),
@@ -148,6 +157,7 @@ abstract class DevicesInfoBase{
         ));
       } else {
         deviceMap.putIfAbsent(device.id, () => Device(
+          device.id,
           device.get('name'),
           device.get('enabled'),
           true,
