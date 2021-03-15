@@ -56,6 +56,10 @@
   "privilege_add_admin" : "Dodawanie administratorów",
   "privilege_add_admin_text" : "Jednym z zadań administracji jest samoorganizacja. Oznacza to, że tylko wy zarządzacie kto ma uprawnienia administratora w waszym akademiku, tzn możecie jest nadać i zabrać każdemu użytkownikowi. ",
   "privilege_improvement" : "Rozwój aplikacji",
-  "privilege_improvement_text" : "Jesteście grupą, która najlepiej dostrzega wady tej aplikacji. Jest ona tworzona przez studentów dla studentów, dlatego jako deweloperzy zachęcamy do kontakotowania się z nami w celu zgłoszania błędów w aplikacji, dzielenia się pomysłami na dalszy jej rozwój, bądź przekazania jakiegokolwiek feedbacku jaki uznacie za stosowny."
-
+  "privilege_improvement_text" : "Jesteście grupą, która najlepiej dostrzega wady tej aplikacji. Jest ona tworzona przez studentów dla studentów, dlatego jako deweloperzy zachęcamy do kontakotowania się z nami w celu zgłoszania błędów w aplikacji, dzielenia się pomysłami na dalszy jej rozwój, bądź przekazania jakiegokolwiek feedbacku jaki uznacie za stosowny.",
+  "true": "Tak",
+  "false": "Nie",
+  "enabled": "Włączona",
+  "available": "Wolna do użytku",
+  "delete_device": "Usuń urządzenie"
 }

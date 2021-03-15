@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/countdown_timer.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:ustropralki/DeviceDetailsPage.dart';
 import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 
@@ -918,7 +919,8 @@ class _DeviceListTileState extends State<DeviceListTile>{
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           highlightColor: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          onTap: (){
+          onLongPress: (){
+            Navigator.of(context).pushNamed(DeviceDetailsPage.routeName, arguments: DeviceDetailsArguments(device.id));
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 20),
@@ -990,6 +992,11 @@ class _DeviceListTileState extends State<DeviceListTile>{
                                   color: Color(0xFF484848),
                                   fontSize: device.endTime.toDate().difference(DateTime.now()).inHours>0? 18: 0,
                                 ),
+                                minTextStyle: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  color: Color(0xFF484848),
+                                  fontSize: device.endTime.toDate().difference(DateTime.now()).inMinutes>0? 18: 0,
+                                ),
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.w300,
                                   fontSize: 18,
@@ -997,7 +1004,7 @@ class _DeviceListTileState extends State<DeviceListTile>{
                                 ),
 
                                 hoursSymbol: device.endTime.toDate().difference(DateTime.now()).inHours>0? "h " : "",
-                                minSymbol: "m ",
+                                minSymbol: device.endTime.toDate().difference(DateTime.now()).inMinutes>0? "m " : "",
                                 secSymbol: "s ",
 
                                 onEnd: (){

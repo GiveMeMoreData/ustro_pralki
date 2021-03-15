@@ -56,5 +56,11 @@
   "privilege_add_admin" : "Adding admins",
   "privilege_add_admin_text" : "One of the tasks of administration is self-organization. This means that only you decide who has admin privileges in your dormitory. You can grant or take them away independently.",
   "privilege_improvement" : "App improvement",
-  "privilege_improvement_text": "You are the group that sees the imperfections of this app the clearest. It was created by students for students, that's why as developers we strongly encourage you to contact us. We will welcome any error details, thoughts and ideas for further app improvement or any feedback you wish to provide."
+  "privilege_improvement_text": "You are the group that sees the imperfections of this app the clearest. It was created by students for students, that's why as developers we strongly encourage you to contact us. We will welcome any error details, thoughts and ideas for further app improvement or any feedback you wish to provide.",
+  "true": "Yes",
+  "false": "No",
+  "enabled": "Enabled",
+  "available": "Available",
+  "delete_device": "Delete device"
+
 }
