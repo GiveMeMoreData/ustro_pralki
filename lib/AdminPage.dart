@@ -1,13 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:ustropralki/HomePage.dart';
-import 'package:ustropralki/LoginPage.dart';
-import 'package:ustropralki/ProfilePage.dart';
-import 'package:ustropralki/Widgets/SelectableTile.dart';
 import 'package:ustropralki/Widgets/Tile.dart';
 import 'package:ustropralki/templates/AppBar.dart';
 import 'package:ustropralki/templates/DevicesSingleton.dart';
