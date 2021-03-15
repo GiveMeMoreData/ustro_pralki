@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:ustropralki/HomePage.dart';
 import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/ProfilePage.dart';
@@ -170,8 +171,8 @@ class _AddDevicePageState extends State<AddDevicePage> {
   String _newDeviceName = "";
 
 
-  Future<void> addNewDevice(){
-    _devices.createDevice(_newDeviceName, _user.user.locationId);
+  Future<void> addNewDevice() async {
+    await _devices.createDevice(_newDeviceName, _user.user.locationId);
   }
 
   @override
@@ -223,7 +224,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
 
@@ -236,7 +237,10 @@ class _AddDevicePageState extends State<AddDevicePage> {
                   elevation: _newDeviceName.isEmpty? 0 : 10,
                   shadowColor: Color(0xAAFF6600),
                   child: InkWell(
-                    onTap: addNewDevice,
+                    onTap: () async {
+                      await addNewDevice();
+                      Navigator.of(context).pop();
+                    },
                     borderRadius: BorderRadius.circular(40),
                     splashColor: Colors.black,
                     child: Container(
