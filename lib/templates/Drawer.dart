@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ustropralki/AdminPage.dart';
+import 'package:ustropralki/AdminPage/AdminPage.dart';
 import 'package:ustropralki/HomePage.dart';
 import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/ProfilePage.dart';

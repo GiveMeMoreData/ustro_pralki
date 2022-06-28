@@ -5,7 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_countdown_timer/countdown_timer.dart';
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:ustropralki/DeviceDetailsPage.dart';
 import 'package:ustropralki/templates/UserSingleton.dart';
@@ -837,7 +840,7 @@ class _MyHomePageState extends State<MyHomePage> {
             alignment: AlignmentDirectional.bottomCenter,
             children: <Widget>[
               ListView.builder(
-                padding: const EdgeInsets.all(25),
+                padding: const EdgeInsets.fromLTRB(25,25,25,85),
                 itemCount: devices.deviceMap.length,
                 itemBuilder: (context, int index){
                   return DeviceListTile(device: devices.deviceMap.values.toList()[index],);
@@ -854,6 +857,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   shadowColor: Color(0xAAFF6600),
                   child: InkWell(
                     onTap: () async {
+
+                      var status = await Permission.camera.status;
+                      if(status.isPermanentlyDenied){
+                        // TODO show info
+                        return;
+                      }
+                      if(status.isDenied){
+                        var newStatus = await Permission.camera.request();
+                        if(!newStatus.isGranted){
+                          return;
+                        }
+                      }
+
                       String cameraScanResult = await scanner.scan();
 
                       if(cameraScanResult == null){
@@ -899,14 +915,40 @@ class DeviceListTile extends StatefulWidget{
 
 class _DeviceListTileState extends State<DeviceListTile>{
 
+
+  void onDeviceEnd(){
+      setState(() {
+        device.available = true;
+        device.endTime = null;
+      });
+  }
+
   _DeviceListTileState(this.device);
   final Device device;
   Duration timeDiff;
+  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
+  CountdownTimerController controller;
+
+  Widget endWidget = Text(
+    "End",
+    style: TextStyle(
+    fontWeight: FontWeight.w300,
+    color: Color(0xFF484848),
+    fontSize: 18,
+    ),
+  );
+
+  TextStyle timeStyle = TextStyle(
+    fontWeight: FontWeight.w300,
+    color: Color(0xFF484848),
+    fontSize: 18,
+  );
 
   @override
   Widget build(BuildContext context) {
     if(device.endTime != null){
       timeDiff = device.endTime.toDate().difference(DateTime.now());
+      // controller = CountdownTimerController(endTime: timeDiff.inMilliseconds, onEnd: onDeviceEnd);
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -920,7 +962,7 @@ class _DeviceListTileState extends State<DeviceListTile>{
           highlightColor: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           onLongPress: (){
-            Navigator.of(context).pushNamed(DeviceDetailsPage.routeName, arguments: DeviceDetailsArguments(device.id));
+            Navigator.of(context).pushNamed(DeviceDetailsPage.routeName, arguments: DeviceDetailsArguments(device.id, device.name));
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 20),
@@ -978,41 +1020,77 @@ class _DeviceListTileState extends State<DeviceListTile>{
                             children: <Widget>[
                               Text(
                                 AppLocalizations.of(context).translate('device_active'),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 18,
-                                  color: Color(0xFF484848),
-                                ),
+                                style: timeStyle,
                               ),
+                              // CountdownTimer(
+                              //   endTime: device.endTime.millisecondsSinceEpoch,
+                              //
+                              //   hoursTextStyle: TextStyle(
+                              //     fontWeight: FontWeight.w300,
+                              //     color: Color(0xFF484848),
+                              //     fontSize: device.endTime.toDate().difference(DateTime.now()).inHours>0? 18: 0,
+                              //   ),
+                              //   minTextStyle: TextStyle(
+                              //     fontWeight: FontWeight.w300,
+                              //     color: Color(0xFF484848),
+                              //     fontSize: device.endTime.toDate().difference(DateTime.now()).inMinutes>0? 18: 0,
+                              //   ),
+                              //   textStyle: TextStyle(
+                              //     fontWeight: FontWeight.w300,
+                              //     fontSize: 18,
+                              //     color: Color(0xFF484848),
+                              //   ),
+                              //
+                              //   hoursSymbol: device.endTime.toDate().difference(DateTime.now()).inHours>0? "h " : "",
+                              //   minSymbol: device.endTime.toDate().difference(DateTime.now()).inMinutes>0? "m " : "",
+                              //   secSymbol: "s ",
+                              //
+                              //   onEnd: (){
+                              //     setState(() {
+                              //       device.available = true;
+                              //       device.endTime = null;
+                              //     });
+                              //   },
+                              // ),
                               CountdownTimer(
                                 endTime: device.endTime.millisecondsSinceEpoch,
-
-                                hoursTextStyle: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  color: Color(0xFF484848),
-                                  fontSize: device.endTime.toDate().difference(DateTime.now()).inHours>0? 18: 0,
-                                ),
-                                minTextStyle: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  color: Color(0xFF484848),
-                                  fontSize: device.endTime.toDate().difference(DateTime.now()).inMinutes>0? 18: 0,
-                                ),
-                                textStyle: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 18,
-                                  color: Color(0xFF484848),
-                                ),
-
-                                hoursSymbol: device.endTime.toDate().difference(DateTime.now()).inHours>0? "h " : "",
-                                minSymbol: device.endTime.toDate().difference(DateTime.now()).inMinutes>0? "m " : "",
-                                secSymbol: "s ",
-
                                 onEnd: (){
                                   setState(() {
                                     device.available = true;
                                     device.endTime = null;
                                   });
                                 },
+                                widgetBuilder: (BuildContext context, CurrentRemainingTime time) {
+                                  if (time == null) {
+                                    return endWidget;
+                                  }
+
+                                  List<Widget> list = [];
+
+                                  if (time.hours != null) {
+                                    list.add(
+                                      Text(time.hours.toString() + "h ", style: timeStyle),
+                                    );
+                                  }
+
+                                  if (time.min != null) {
+                                    list.add(
+                                      Text(time.min.toString() + "m ", style: timeStyle),
+                                    );
+                                  }
+
+                                  if (time.sec != null) {
+                                    list.add(
+                                      Text(time.sec.toString() + "s", style: timeStyle,),
+                                    );
+                                  }
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: list,
+                                  );
+                                },
+                                endWidget: endWidget,
+                                textStyle: timeStyle,
                               ),
                             ],
                           ),

@@ -75,7 +75,8 @@ abstract class UstroUserBase{
     }
 
     // Checking if user data is loaded and contains information
-    if(userData.data() == null || userData.data().isEmpty){
+    // if(userData.data() == null || userData.data().isEmpty){ # todo find if isEmpty can be truly ignored
+    if(userData.data() == null ){
       print("[ERROR] Unsupported error occured. There is no data stored for passed userId ${_user.uid}.uid");
       return;
     }
@@ -91,19 +92,19 @@ abstract class UstroUserBase{
     print("[INFO] User loaded");
     return;
   }
-
-  void updateNotifications(bool receiveNotifications) {
-    if(receiveNotifications){
-      // get new FMC token, save and send to DB
-      final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-      _firebaseMessaging.getToken().then((value) => {
-        updateFCMToken(value)
-      });
-    } else {
-      // delete token from DB
-      updateFCMToken(null);
-    }
-  }
+  // TODO fix FirebaseMessaging
+  // void updateNotifications(bool receiveNotifications) {
+  //   if(receiveNotifications){
+  //     // get new FMC token, save and send to DB
+  //     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  //     _firebaseMessaging.getToken().then((value) => {
+  //       updateFCMToken(value)
+  //     });
+  //   } else {
+  //     // delete token from DB
+  //     updateFCMToken(null);
+  //   }
+  // }
 
   void updateFCMToken(var newToken){
     if(newToken == user.FCMToken){

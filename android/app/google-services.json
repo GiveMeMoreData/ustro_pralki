@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "663108879257-qlssm1mb878pvl4l649fcar1jhkle4n0.apps.googleusercontent.com",
+          "client_id": "663108879257-1ulg72bjde9qvoj37qkops0uh3d5sris.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "pom.pomarancza.ustropralki",
-            "certificate_hash": "f26f1fb55fdd8eb9870d921e7a0e8bf654ad6e79"
+            "certificate_hash": "51a27705be6e3ad669dd28d0d3e01bf5772dc5c2"
+          }
+        },
+        {
+          "client_id": "663108879257-33ibm72v9kgk9htea5f7k7ukjhu1l490.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pom.pomarancza.ustropralki",
+            "certificate_hash": "92b9b8fa0b596abc29e30be95987011c6600ded1"
           }
         },
         {
@@ -31,11 +39,11 @@
           }
         },
         {
-          "client_id": "663108879257-1ulg72bjde9qvoj37qkops0uh3d5sris.apps.googleusercontent.com",
+          "client_id": "663108879257-qlssm1mb878pvl4l649fcar1jhkle4n0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "pom.pomarancza.ustropralki",
-            "certificate_hash": "51a27705be6e3ad669dd28d0d3e01bf5772dc5c2"
+            "certificate_hash": "f26f1fb55fdd8eb9870d921e7a0e8bf654ad6e79"
           }
         },
         {

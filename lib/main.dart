@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ustropralki/AdminPage.dart';
+import 'package:ustropralki/AdminPage/AddAdminPage.dart';
+import 'package:ustropralki/AdminPage/AddDevicePage.dart';
+import 'package:ustropralki/AdminPage/AdminPage.dart';
+import 'package:ustropralki/AdminPage/MyPrivelagesPage.dart';
 import 'package:ustropralki/DeviceDetailsPage.dart';
 import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/ProfilePage.dart';
@@ -51,7 +54,6 @@ class MyApp extends StatelessWidget {
       routes: {
         "/" : (context) => LoadingPage(),
         "/home": (context) => MyHomePage(),
-        "/home/device_details": (context) => DeviceDetailsPage(),
         "/profile" : (context) => ProfilePage(),
         "/admin" : (context) => AdminPage(),
         "/admin/add_device" : (context) => AddDevicePage(),
@@ -61,6 +63,22 @@ class MyApp extends StatelessWidget {
         "/login/dorm" : (context) => DormSelection(),
         "/login/language" : (context) =>LanguageSelection(),
       },
+      onGenerateRoute: (settings){
+        if (settings.name == DeviceDetailsPage.routeName){
+          final args = settings.arguments as DeviceDetailsArguments;
+
+          return MaterialPageRoute(
+              builder: (context) {
+                return DeviceDetailsPage(
+                  deviceId: args.deviceId,
+                  deviceName: args.deviceName,
+                );
+              }
+          );
+        }
+        assert(false, 'Need to implement ${settings.name}');
+        return null;
+      },
     );
   }
 }
@@ -68,51 +86,57 @@ class MyApp extends StatelessWidget {
 class LoadingPage extends StatelessWidget{
 
   bool _dataLoaded = false;
+  bool _initialized = false;
 
   final DevicesInfoBase devices = DevicesInfoState();
   final UstroUserBase ustroUser = UstroUserState();
 
 
+
   Future<void> initializeApp(BuildContext context) async {
+    if (_initialized){
+      return;
+    }
+    _initialized = true;
     await initializeDefault(context);
-    await configureFCM();
+    // await configureFCM();
     await checkIfLogged(context);
   }
 
-  Future<void> configureFCM() async {
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-    _firebaseMessaging.configure(
-      onLaunch: (Map<String, dynamic> message) {
-        print('onLaunch called');
-        return;
-      },
-      onResume: (Map<String, dynamic> message) {
-        print('onResume called');
-        return;
-      },
-      onMessage: (Map<String, dynamic> message) {
-        print('onMessage called');
-        return;
-      },
-      onBackgroundMessage: _onBackgroundMessage,
-    );
-    _firebaseMessaging.subscribeToTopic('all');
-    _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(
-      sound: true,
-      badge: true,
-      alert: true,
-    ));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print('Hello');
-    });
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _firebaseMessaging.getToken().then((token) {
-      prefs.setString("FCM_token", token);
-      print("device FCM token: $token");
-    });
-  }
+  // Future<void> configureFCM() async {
+  //   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  //   _firebaseMessaging.configure(
+  //     onLaunch: (Map<String, dynamic> message) {
+  //       print('onLaunch called');
+  //       return;
+  //     },
+  //     onResume: (Map<String, dynamic> message) {
+  //       print('onResume called');
+  //       return;
+  //     },
+  //     onMessage: (Map<String, dynamic> message) {
+  //       print('onMessage called');
+  //       return;
+  //     },
+  //     onBackgroundMessage: _onBackgroundMessage,
+  //   );
+  //   _firebaseMessaging.subscribeToTopic('all');
+  //   _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(
+  //     sound: true,
+  //     badge: true,
+  //     alert: true,
+  //   ));
+  //   _firebaseMessaging.onIosSettingsRegistered
+  //       .listen((IosNotificationSettings settings) {
+  //     print('Hello');
+  //   });
+  //
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   _firebaseMessaging.getToken().then((token) {
+  //     prefs.setString("FCM_token", token);
+  //     print("device FCM token: $token");
+  //   });
+  // }
 
   static Future<void> _onBackgroundMessage(Map<String, dynamic> message) {
     print('onBackgroundMessage called');
@@ -147,7 +171,7 @@ class LoadingPage extends StatelessWidget{
       messagingSenderId: '663108879257',
     );
 
-    FirebaseApp app = await Firebase.initializeApp( options:  firebaseOptions);
+    FirebaseApp app = await Firebase.initializeApp( name: 'ustropralki', options:  firebaseOptions);
     assert(app != null);
     print('Initialized default app $app');
   }

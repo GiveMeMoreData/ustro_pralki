@@ -36,7 +36,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
     if(userData.data() != null){
       // check if current token is valid
-      if(userData.data()['token'] == prefs.get('FCM_token')){
+      if(userData.get('token') == prefs.get('FCM_token')){ // TODO check is this works
         // document exists with valid token. no action is necessary
         return true;
       }

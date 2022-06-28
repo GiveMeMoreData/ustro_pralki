@@ -177,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage>{
                           child: Switch.adaptive(
                               value: _user.user.FCMToken!=null,
                               onChanged: (_value) => setState((){
-                                _user.updateNotifications(_value);
+                                // _user.updateNotifications(_value); # TODO
                               }),
                             activeColor: Theme.of(context).accentColor,
                             inactiveTrackColor: Theme.of(context).accentColor.withOpacity(0.5),
@@ -328,7 +328,7 @@ class _DormSelectionState extends State<DormSelection>{
                                 selected: index == selected,
                                 leading:
                                 NormalText(
-                                  locations[index].data()['name'],
+                                  locations[index].get('name'),
                                 ),
                                 onTap: (){
                                   setState(() {
@@ -360,7 +360,7 @@ class _DormSelectionState extends State<DormSelection>{
                 bottom: 20,
                 child: Material(
                   borderRadius: BorderRadius.circular(40),
-                  color: selected == -1? Theme.of(context).disabledColor : Theme.of(context).accentColor,
+                  color: selected == -1? Theme.of(context).disabledColor : Theme.of(context).colorScheme.secondary,
                   elevation: selected == -1? 0 : 10,
                   shadowColor: Color(0xAAFF6600),
                   animationDuration: Duration(milliseconds: 700),
