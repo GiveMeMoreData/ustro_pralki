@@ -105,14 +105,27 @@ class LoadingPage extends StatelessWidget{
     }
     _initialized = true;
     await initializeDefault(context);
-    // await configureFCM();
 
     await checkVersion(context);
 
     await checkIfLogged(context);
+    await configureFCM(context);
+  }
+
+  Future<void> setFCMToken() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      FirebaseMessaging.instance.getToken().then((token) {
+        prefs.setString("FCM_token", token!);
+        final String? userId = FirebaseAuth.instance.currentUser?.uid;
+        FirebaseFirestore.instance.collection('users').doc(userId!).set({"token": token}, SetOptions(merge: true));
+        print("device FCM token: $token");
+      });
   }
 
   Future<void> configureFCM(context) async {
+
+    await setFCMToken();
+    await FirebaseMessaging.instance.subscribeToTopic('all');
 
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
@@ -155,8 +168,6 @@ class LoadingPage extends StatelessWidget{
               channel.id,
               channel.name,
               channelDescription: channel.description,
-              // TODO add a proper drawable resource to android, for now using
-              //      one that already exists in example app.
               icon: 'launch_background',
             ),
           ),
@@ -181,6 +192,11 @@ class LoadingPage extends StatelessWidget{
         .resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
+
+
+
+    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+
   }
 
 
@@ -220,9 +236,11 @@ class LoadingPage extends StatelessWidget{
   //   });
   // }
 
-  static Future<void> _onBackgroundMessage(Map<String, dynamic> message) {
+  Future<void> _onBackgroundMessage(RemoteMessage message) async {
+    // If you're going to use other Firebase services in the background, such as Firestore,
+    // make sure you call `initializeApp` before using other Firebase services.
+    await Firebase.initializeApp();
     print('onBackgroundMessage called');
-    return Future.value(null);
   }
 
   Future<void> checkIfLogged(BuildContext context) async {
