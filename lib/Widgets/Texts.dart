@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class NormalText extends StatelessWidget{
 
-  NormalText(this.text,{this.fontSize = 18, this.color = const Color(0xFF484848), this.fontWeight = FontWeight.normal, Key key}) : super(key: key);
+  NormalText(this.text,{this.fontSize = 18, this.color = const Color(0xFF484848), this.fontWeight = FontWeight.normal, Key? key}) : super(key: key);
 
   final String text;
   final double fontSize;

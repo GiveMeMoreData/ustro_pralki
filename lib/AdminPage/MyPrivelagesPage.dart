@@ -14,8 +14,11 @@ class MyPrivilegesPage extends StatefulWidget{
 
 
 class _MyPrivilegesPageState extends State<MyPrivilegesPage> {
+
+
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? localization = AppLocalizations.of(context);
     return Scaffold(
         appBar: CustomAppBar("Ustro Pralki", elevation: 10.0, callback: setState,),
         body: SingleChildScrollView(
@@ -33,13 +36,13 @@ class _MyPrivilegesPageState extends State<MyPrivilegesPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       NormalText(
-                        AppLocalizations.of(context).translate("privilege_add_device"),
+                        localization!.translate("privilege_add_device")!,
                       ),
                       SizedBox(
                         height: 12,
                       ),
                       NormalText(
-                        AppLocalizations.of(context).translate("privilege_add_device_text"),
+                        localization.translate("privilege_add_device_text")!,
                         fontSize: 16,
                         fontWeight: FontWeight.w300,
                       )
@@ -52,13 +55,13 @@ class _MyPrivilegesPageState extends State<MyPrivilegesPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       NormalText(
-                        AppLocalizations.of(context).translate("privilege_edit_device"),
+                        localization.translate("privilege_edit_device")!,
                       ),
                       SizedBox(
                         height: 12,
                       ),
                       NormalText(
-                        AppLocalizations.of(context).translate("privilege_edit_device_text"),
+                        localization.translate("privilege_edit_device_text")!,
                         fontSize: 16,
                         fontWeight: FontWeight.w300,
                       )
@@ -71,13 +74,13 @@ class _MyPrivilegesPageState extends State<MyPrivilegesPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       NormalText(
-                        AppLocalizations.of(context).translate("privilege_add_admin"),
+                        localization.translate("privilege_add_admin")!,
                       ),
                       SizedBox(
                         height: 12,
                       ),
                       NormalText(
-                        AppLocalizations.of(context).translate("privilege_add_admin_text"),
+                        localization.translate("privilege_add_admin_text")!,
                         fontSize: 16,
                         fontWeight: FontWeight.w300,
                       )
@@ -90,13 +93,13 @@ class _MyPrivilegesPageState extends State<MyPrivilegesPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       NormalText(
-                        AppLocalizations.of(context).translate("privilege_improvement"),
+                        localization.translate("privilege_improvement")!,
                       ),
                       SizedBox(
                         height: 12,
                       ),
                       NormalText(
-                        AppLocalizations.of(context).translate("privilege_improvement_text"),
+                        localization.translate("privilege_improvement_text")!,
                         fontSize: 16,
                         fontWeight: FontWeight.w300,
                       )

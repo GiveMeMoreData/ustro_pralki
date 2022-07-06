@@ -25,7 +25,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
 
 
   Future<void> addNewDevice() async {
-    await _devices.createDevice(_newDeviceName, _user.user.locationId);
+    await _devices.createDevice(_newDeviceName, _user.user.locationId!);
   }
 
   @override
@@ -43,7 +43,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
               Positioned(
                 top: 25,
                 child: NormalText(
-                  AppLocalizations.of(context).translate("add_device"),
+                  AppLocalizations.of(context)!.translate("add_device")!,
                   fontSize: 24,
                   color: Colors.grey,
                   fontWeight: FontWeight.w300,
@@ -63,7 +63,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                         },
                         textAlign: TextAlign.center,
                         decoration: InputDecoration.collapsed(
-                            hintText: AppLocalizations.of(context).translate("device_name"),
+                            hintText: AppLocalizations.of(context)!.translate("device_name"),
                             hintStyle: TextStyle(
                               fontSize: 20,
                               color: Colors.grey[500],
@@ -82,7 +82,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
               ),
 
               Positioned(
-                bottom: 20,
+                bottom: MediaQuery.of(context).viewPadding.bottom + 20,
                 child: Material(
                   borderRadius: BorderRadius.circular(40),
                   animationDuration: Duration(milliseconds: 500),
@@ -100,7 +100,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                       alignment: AlignmentDirectional.center,
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                       child: Text(
-                        AppLocalizations.of(context).translate('create'),
+                        AppLocalizations.of(context)!.translate('create')!,
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,

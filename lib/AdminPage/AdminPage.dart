@@ -54,7 +54,7 @@ class _AdminPageState extends State<AdminPage>{
               Padding(
                 padding: const EdgeInsets.fromLTRB(25,25,25,15),
                 child: NormalText(
-                  AppLocalizations.of(context).translate("admin"),
+                  AppLocalizations.of(context)!.translate("admin")!,
                   fontSize: 24,
                   color: Colors.grey,
                   fontWeight: FontWeight.w300,
@@ -67,13 +67,13 @@ class _AdminPageState extends State<AdminPage>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     NormalText(
-                      AppLocalizations.of(context).translate("all_admins"),
+                      AppLocalizations.of(context)!.translate("all_admins")!,
                     ),
                     SizedBox(
                       height: 12,
                     ),
                     NormalText(
-                      _user.user.email,
+                      _user.user.email!,
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
                     )
@@ -88,7 +88,7 @@ class _AdminPageState extends State<AdminPage>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         NormalText(
-                            AppLocalizations.of(context).translate("add_device")
+                            AppLocalizations.of(context)!.translate("add_device")!
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,
@@ -108,7 +108,7 @@ class _AdminPageState extends State<AdminPage>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         NormalText(
-                            AppLocalizations.of(context).translate("add_admin")
+                            AppLocalizations.of(context)!.translate("add_admin")!
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,
@@ -128,7 +128,7 @@ class _AdminPageState extends State<AdminPage>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         NormalText(
-                            AppLocalizations.of(context).translate("privileges")
+                            AppLocalizations.of(context)!.translate("privileges")!
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,

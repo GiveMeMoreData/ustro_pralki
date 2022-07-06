@@ -8,18 +8,18 @@ import 'package:ustropralki/templates/localization.dart';
 class UstroUser{
 
   @protected
-  String id;
+  String? id;
   @protected
-  String email;
+  String? email;
   @protected
-  String name;
+  String? name;
   @protected
-  String language;
+  String? language;
   @protected
-  String locationId;
+  String? locationId;
   @protected
   // ignore: non_constant_identifier_names
-  String FCMToken;
+  String? FCMToken;
   @protected
   bool isAdmin;
 
@@ -38,7 +38,7 @@ class UstroUser{
   void setLocationId(String newLocationId) {
     locationId = newLocationId;
   }
-  void setFCMToken(String newFCMToken){
+  void setFCMToken(String? newFCMToken){
     FCMToken = newFCMToken;
   }
   void setIsAdmin(bool newIsAdmin){
@@ -53,7 +53,7 @@ class UstroUser{
 abstract class UstroUserBase{
 
   @protected
-  UstroUser user;
+  late UstroUser user;
 
 
   Future<void> loadUserFromFirebaseAuthUser(User _user) async {
@@ -83,8 +83,8 @@ abstract class UstroUserBase{
 
     //user exists and we should be able to read all necessary information
     user.setId(_user.uid);
-    user.setName(_user.displayName);
-    user.setEmail(_user.email);
+    user.setName(_user.displayName.toString());
+    user.setEmail(_user.email.toString());
     user.setLanguage(userData.get("language"));
     user.setFCMToken(userData.get("token"));
     user.setLocationId(userData.get("location_id"));
@@ -125,12 +125,12 @@ abstract class UstroUserBase{
     }
 
     final locationDocument = await FirebaseFirestore.instance.collection('locations').doc(user.locationId).get();
-    if(!locationDocument.data().containsKey("admin_user_id")){
+    if(!locationDocument.data()!.containsKey("admin_user_id")){
       // location document does not contain id's of admins
       return;
     }
 
-    if(locationDocument.data()["admin_user_id"].contains(user.id)){
+    if(locationDocument.data()!["admin_user_id"].contains(user.id)){
       print("User is admin of location ${user.locationId}");
       user.isAdmin = true;
     }
@@ -153,13 +153,13 @@ abstract class UstroUserBase{
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('language', newLanguage);
-    AppLocalizations.of(context).loadNewLocale(Locale(newLanguage, ''));
+    AppLocalizations.of(context)!.loadNewLocale(Locale(newLanguage, ''));
     user.setLanguage(newLanguage);
     updateUserData(fieldName: "language", fieldNewValue: newLanguage);
 
   }
 
-  void updateUserData({Map<String, dynamic> updateData, String fieldName, dynamic fieldNewValue}){
+  void updateUserData({Map<String, dynamic>? updateData, String? fieldName, dynamic fieldNewValue}){
     if(updateData != null && updateData.isNotEmpty){
       FirebaseFirestore.instance.collection('users').doc(user.id).set(updateData,SetOptions(merge: true));
     }

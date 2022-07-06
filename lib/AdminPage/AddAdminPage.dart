@@ -19,7 +19,7 @@ class _AddAdminPageState extends State<AddAdminPage> {
   String _newAdminEmail = "";
 
   Future<void> addNewAdmin(){
-
+    return Future.value(null);
   }
 
 
@@ -38,7 +38,7 @@ class _AddAdminPageState extends State<AddAdminPage> {
               Positioned(
                 top: 25,
                 child: NormalText(
-                  AppLocalizations.of(context).translate("add_admin"),
+                  AppLocalizations.of(context)!.translate("add_admin")!,
                   fontSize: 24,
                   color: Colors.grey,
                   fontWeight: FontWeight.w300,
@@ -59,7 +59,7 @@ class _AddAdminPageState extends State<AddAdminPage> {
                         },
                         textAlign: TextAlign.center,
                         decoration: InputDecoration.collapsed(
-                            hintText: AppLocalizations.of(context).translate("users_email"),
+                            hintText: AppLocalizations.of(context)!.translate("users_email"),
                             hintStyle: TextStyle(
                               fontSize: 20,
                               color: Colors.grey[500],
@@ -78,7 +78,7 @@ class _AddAdminPageState extends State<AddAdminPage> {
               ),
 
               Positioned(
-                bottom: 20,
+                bottom: MediaQuery.of(context).viewPadding.bottom + 20,
                 child: Material(
                   borderRadius: BorderRadius.circular(40),
                   animationDuration: Duration(milliseconds: 500),
@@ -93,7 +93,7 @@ class _AddAdminPageState extends State<AddAdminPage> {
                       alignment: AlignmentDirectional.center,
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                       child: Text(
-                        AppLocalizations.of(context).translate('add'),
+                        AppLocalizations.of(context)!.translate('add')!,
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,

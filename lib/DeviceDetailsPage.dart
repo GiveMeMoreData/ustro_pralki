@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ustropralki/Widgets/Dialogs.dart';
 import 'package:ustropralki/Widgets/Texts.dart';
 import 'package:ustropralki/Widgets/Tile.dart';
 import 'package:ustropralki/templates/AppBar.dart';
@@ -18,12 +19,12 @@ class DeviceDetailsArguments{
 
 class DeviceDetailsPage extends StatefulWidget {
 
-  final String deviceId;
-  final String deviceName;
+  final String? deviceId;
+  final String? deviceName;
   static const routeName = '/home/device_details';
 
   const DeviceDetailsPage({
-    Key key,
+    Key? key,
     this.deviceId,
     this.deviceName
   }) : super(key: key);
@@ -33,140 +34,16 @@ class DeviceDetailsPage extends StatefulWidget {
 
 class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
 
-  TextEditingController _controller;
+  late TextEditingController _controller;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Future<DocumentSnapshot> deviceDataFuture;
+  late Future<DocumentSnapshot> deviceDataFuture;
   bool deviceNameChangeEnabled = false;
 
-
-  Future<void> _showDeleteDialog() async {
-    showGeneralDialog(
-        context: context,
-        pageBuilder: (context, anim1, anim2) {return;},
-        barrierDismissible: false,
-        barrierColor: Colors.white.withOpacity(0.1),
-        barrierLabel: '',
-        transitionBuilder: (context, anim1, anim2, child) {
-          final curvedValue = Curves.easeInOut.transform(anim1.value)- 1.0;
-          return Transform(
-            transform: Matrix4.translationValues(0, curvedValue*200, 0),
-            child: Opacity(
-              opacity: anim1.value,
-              child: Dialog(
-                elevation: 30,
-                backgroundColor: Colors.white,
-                shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: BorderSide.none,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical : 25.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 35),
-                        child: Text(
-                          "Usuwanie urządzenia",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 25,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
-                        child: Text(
-                          "Tej operacji nie da się cofnąć. Czy jesteś pewny, że chcesz usunąć urządzenie?", //TODO localization
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 16,
-                            height: 1.5,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(40),
-                          color: Colors.red.shade700,
-                          elevation: 8,
-                          shadowColor: Color(0xAAd66060),
-                          child: InkWell(
-                            onTap: () async {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              _deleteDevice();
-                            },
-                            borderRadius: BorderRadius.circular(40),
-                            splashColor: Colors.black,
-                            child: Container(
-                              alignment: AlignmentDirectional.center,
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
-                              child: Text(
-                                "Tak", //TODO localization
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 15,),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(40),
-                          color: Colors.grey[400],
-                          elevation: 8,
-                          shadowColor: Color(0xAABDBDBD),
-                          child: InkWell(
-                            onTap: Navigator.of(context).pop,
-                            borderRadius: BorderRadius.circular(40),
-                            splashColor: Colors.black,
-                            child: Container(
-                              alignment: AlignmentDirectional.center,
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
-                              child: Text(
-                                "Nie", //TODO localization
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-        transitionDuration: Duration(milliseconds: 400)
-    );
-  }
-
-  Future<void> _deleteDevice() async {
-    await _firestore.collection('devices').doc(widget.deviceId).delete();
-  }
 
   Future<void> _changeDeviceState(isDeviceEnabled) async {
     await _firestore.collection('devices').doc(widget.deviceId).set({"enabled": !isDeviceEnabled},SetOptions(merge: true));
     setState((){
-      deviceDataFuture = getDeviceDetails(widget.deviceId);
+      deviceDataFuture = getDeviceDetails(widget.deviceId!);
     });
 }
 
@@ -175,7 +52,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
       return;
     }
     await _firestore.collection('devices').doc(widget.deviceId).set({"name": _controller.text},SetOptions(merge: true));
-    deviceDataFuture = getDeviceDetails(widget.deviceId);
+    deviceDataFuture = getDeviceDetails(widget.deviceId!);
   }
 
   Future<DocumentSnapshot> getDeviceDetails(String deviceId) async {
@@ -185,7 +62,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
   @override
   void initState() {
     super.initState();
-    deviceDataFuture = getDeviceDetails(widget.deviceId);
+    deviceDataFuture = getDeviceDetails(widget.deviceId!);
     _controller = TextEditingController(text: widget.deviceName);
   }
 
@@ -222,7 +99,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                           height: 20,
                           decoration: BoxDecoration(
                             borderRadius: new BorderRadius.circular(20.0),
-                            color: deviceData.data.get('enabled')? deviceData.data.get('available')? Colors.green : Colors.red : Colors.grey,
+                            color: deviceData.data!.get('enabled')? deviceData.data!.get('available')? Colors.green : Colors.red : Colors.grey,
                           ),
                         ),
                       ),
@@ -286,7 +163,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                                   height: 12,
                                 ),
                                 NormalText(
-                                  deviceData.data.id,
+                                  deviceData.data!.id,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w300,
                                 )
@@ -294,7 +171,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                await Clipboard.setData(new ClipboardData(text: deviceData.data.id));
+                                await Clipboard.setData(new ClipboardData(text: deviceData.data!.id));
                                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Skopiowano")));
                               },
                               child: Icon(
@@ -308,7 +185,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: ()=>{_changeDeviceState(deviceData.data.get('enabled'))},
+                        onTap: ()=>{_changeDeviceState(deviceData.data!.get('enabled'))},
                         child: Tile(
                           child: Column(
                             children: <Widget>[
@@ -316,10 +193,10 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   NormalText(
-                                      AppLocalizations.of(context).translate("enabled")
+                                      AppLocalizations.of(context)!.translate("enabled")!
                                   ),
                                   NormalText(
-                                    AppLocalizations.of(context).translate(deviceData.data.get('enabled').toString()),
+                                    AppLocalizations.of(context)!.translate(deviceData.data!.get('enabled').toString())!,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w300,
                                   )
@@ -336,10 +213,10 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 NormalText(
-                                    AppLocalizations.of(context).translate("available")
+                                    AppLocalizations.of(context)!.translate("available")!
                                 ),
                                 NormalText(
-                                  AppLocalizations.of(context).translate(deviceData.data.get('available').toString()),
+                                  AppLocalizations.of(context)!.translate(deviceData.data!.get('available').toString())!,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w300,
                                 )
@@ -351,7 +228,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: InkWell(
-                          onTap: _showDeleteDialog,
+                          onTap: () => showDeviceDialog(context, DeleteDeviceDialog(deviceData.data!.id, null, setState)),
                           child: Container(
                             width: MediaQuery.of(context).size.width*0.9,
                             decoration: BoxDecoration(

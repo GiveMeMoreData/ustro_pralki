@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class Tile extends StatelessWidget{
 
-  const Tile({ this.child, this.callback, Key key}) : super(key: key);
-  final Function callback;
-  final Widget child;
+  const Tile({this.child, this.callback, Key? key}) : super(key: key);
+  final VoidCallback? callback;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {

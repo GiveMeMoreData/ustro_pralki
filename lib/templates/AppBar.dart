@@ -11,7 +11,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
   final double elevation;
   final double height;
   final bool languageWidgetEnabled;
-  Function callback;
+  Function? callback;
 
   CustomAppBar(this.title, {this.elevation = 2, this.height = kToolbarHeight, this.callback, this.languageWidgetEnabled = false});
 
@@ -58,7 +58,7 @@ class LanguageWidget extends StatefulWidget{
 class _LanguageWidgetState extends State<LanguageWidget>{
 
   bool _polishLanguageSelected = true;
-  SharedPreferences prefs;
+  late SharedPreferences prefs;
 
   void checkLanguage() async {
     prefs = await SharedPreferences.getInstance();
@@ -82,10 +82,10 @@ class _LanguageWidgetState extends State<LanguageWidget>{
         child: GestureDetector(
           onTap: () async {
             if(!_polishLanguageSelected){
-              await AppLocalizations.of(context).loadNewLocale(Locale('pl',''));
+              await AppLocalizations.of(context)!.loadNewLocale(Locale('pl',''));
               prefs.setString('language', 'pl');
             } else {
-              await AppLocalizations.of(context).loadNewLocale(Locale('en',''));
+              await AppLocalizations.of(context)!.loadNewLocale(Locale('en',''));
               prefs.setString('language', 'en');
             }
             _polishLanguageSelected = !_polishLanguageSelected;

@@ -5,12 +5,11 @@ class SelectableTile extends StatefulWidget{
   SelectableTile({this.selected, this.onTap, this.leading, this.trailing = const Spacer()});
 
 
-  bool selected;
+  bool? selected;
 
-  Function onTap;
-  Widget leading;
+  Function? onTap;
+  Widget? leading;
   Widget trailing;
-  bool showTrailingOnSelected;
 
   @override
   State<StatefulWidget> createState() => _SelectableListTileState();
@@ -21,7 +20,7 @@ class _SelectableListTileState extends State<SelectableTile>{
 
 
   void _tileAction(){
-    widget.onTap();
+    widget.onTap!();
   }
 
   @override
@@ -29,12 +28,12 @@ class _SelectableListTileState extends State<SelectableTile>{
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Material(
-        color: widget.selected? Theme.of(context).accentColor : Colors.transparent,
+        color: widget.selected!? Theme.of(context).accentColor : Colors.transparent,
         borderRadius: BorderRadius.circular(22.5),
         elevation: 5,
         shadowColor: Color(0x2a989898),
         child: InkWell(
-          splashColor: widget.selected? Colors.white : Theme.of(context).accentColor ,
+          splashColor: widget.selected!? Colors.white : Theme.of(context).accentColor ,
           highlightColor: Colors.transparent,
           borderRadius: BorderRadius.circular(22.5),
           onTap: (){
@@ -61,7 +60,7 @@ class _SelectableListTileState extends State<SelectableTile>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    widget.leading,
+                    widget.leading!,
                     widget.trailing
                   ],
                 ),

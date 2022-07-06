@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ustropralki/AdminPage/AdminPage.dart';
 import 'package:ustropralki/HomePage.dart';
 import 'package:ustropralki/LoginPage.dart';
-import 'package:ustropralki/ProfilePage.dart';
+import 'package:ustropralki/ProfilePage/ProfilePage.dart';
 import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 
@@ -52,7 +52,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
             Container(
               alignment: Alignment.centerLeft,
               child: AutoSizeText(
-                  AppLocalizations.of(context).translate('admin'),
+                  AppLocalizations.of(context)!.translate('admin')!,
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 24,
@@ -142,7 +142,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
                   Container(
                     alignment: Alignment.centerLeft,
                     child: AutoSizeText(
-                        AppLocalizations.of(context).translate('profile'),
+                        AppLocalizations.of(context)!.translate('profile')!,
                         maxLines: 1,
                         style: TextStyle(
                           fontSize: 24,
@@ -197,7 +197,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
                   Container(
                     alignment: AlignmentDirectional.centerStart,
                     child: AutoSizeText(
-                        AppLocalizations.of(context).translate('logout'),
+                        AppLocalizations.of(context)!.translate('logout')!,
                         maxLines: 1,
                         style: TextStyle(
                           fontSize: 24,

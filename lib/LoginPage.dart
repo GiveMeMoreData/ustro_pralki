@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ustropralki/ProfilePage.dart';
+import 'package:ustropralki/ProfilePage/DormSelection.dart';
+import 'package:ustropralki/ProfilePage/LanguageSelection.dart';
+import 'package:ustropralki/ProfilePage/ProfilePage.dart';
 import 'package:ustropralki/templates/DevicesSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -50,8 +52,8 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
   void createNewAccount(User user) async {
 
-    String _newUserLocation;
-    String _newUserLanguage;
+    String? _newUserLocation;
+    String? _newUserLanguage;
 
     // get user FCM token
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -78,7 +80,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
     }
 
     Navigator.of(context).popUntil((route) => route.settings.name == GoogleLogin.routeName);
-    addUserIfPossible(user.uid, _newUserLocation, _newUserLanguage, prefs.get('FCM_token'));
+    addUserIfPossible(user.uid, _newUserLocation!, _newUserLanguage!, prefs.get('FCM_token').toString());
   }
 
   void addUserIfPossible(String userId, String locationId, String language, String token){
@@ -109,7 +111,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
     // get user account
     try{
-      final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
       if (googleSignInAccount == null){
 
         return;
@@ -125,9 +127,9 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
       // log in to firebase auth
       final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      final User firebaseUser = userCredential.user;
-      final User currentUser = FirebaseAuth.instance.currentUser;
-      assert(firebaseUser.uid == currentUser.uid);
+      final User? firebaseUser = userCredential.user;
+      final User? currentUser = FirebaseAuth.instance.currentUser;
+      assert(firebaseUser!.uid == currentUser!.uid);
 
       // after logged in sing out from google sign in
       googleSignIn.disconnect();
@@ -135,7 +137,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
 
       // check if user exists in database
-      if(await checkIfUserInDatabase(currentUser)){
+      if(await checkIfUserInDatabase(currentUser!)){
         print("Signed in ${currentUser.displayName}, userId: ${currentUser.uid}");
         devices.restart();
         Navigator.pushReplacementNamed(context, "/");
@@ -186,7 +188,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     child: AutoSizeText(
-                      AppLocalizations.of(context).translate('login_text'),
+                      AppLocalizations.of(context)!.translate('login_text')!,
                       maxLines: 3,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -199,7 +201,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
                     child: AutoSizeText(
-                      AppLocalizations.of(context).translate('login_text_info'),
+                      AppLocalizations.of(context)!.translate('login_text_info')!,
                       maxLines: 4,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -236,7 +238,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
                                 alignment: AlignmentDirectional.center,
                                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                                 child: AutoSizeText(
-                                  AppLocalizations.of(context).translate('login_with_google'),
+                                  AppLocalizations.of(context)!.translate('login_with_google')!,
                                   maxLines: 1,
                                   style: TextStyle(
                                     fontSize: 20,

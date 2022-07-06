@@ -11,12 +11,17 @@ import 'package:ustropralki/AdminPage/AdminPage.dart';
 import 'package:ustropralki/AdminPage/MyPrivelagesPage.dart';
 import 'package:ustropralki/DeviceDetailsPage.dart';
 import 'package:ustropralki/LoginPage.dart';
-import 'package:ustropralki/ProfilePage.dart';
+import 'package:ustropralki/ProfilePage/DormSelection.dart';
+import 'package:ustropralki/ProfilePage/LanguageSelection.dart';
+import 'package:ustropralki/ProfilePage/ProfilePage.dart';
 import 'package:ustropralki/templates/DevicesSingleton.dart';
 import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'HomePage.dart';
+
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,7 +48,7 @@ class MyApp extends StatelessWidget {
       ),
       supportedLocales: [
         Locale('en',''),
-        Locale('pl',''),
+        Locale('pl','PL'),
       ],
       localizationsDelegates: [
         AppLocalizations.delegate,
@@ -91,7 +96,8 @@ class LoadingPage extends StatelessWidget{
   final DevicesInfoBase devices = DevicesInfoState();
   final UstroUserBase ustroUser = UstroUserState();
 
-
+  late AndroidNotificationChannel channel;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   Future<void> initializeApp(BuildContext context) async {
     if (_initialized){
@@ -100,8 +106,84 @@ class LoadingPage extends StatelessWidget{
     _initialized = true;
     await initializeDefault(context);
     // await configureFCM();
+
+    await checkVersion(context);
+
     await checkIfLogged(context);
   }
+
+  Future<void> configureFCM(context) async {
+
+    channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description: 'This channel is used for important notifications.',
+      importance: Importance.high,
+    );
+
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    /// Create an Android Notification Channel.
+    ///
+    /// We use this channel in the `AndroidManifest.xml` file to override the
+    /// default FCM channel to enable heads up notifications.
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    /// Update the iOS foreground notification presentation options to allow
+    /// heads up notifications.
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              // TODO add a proper drawable resource to android, for now using
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ),
+        );
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      Navigator.pushReplacementNamed(
+        context,
+        '/home',
+      );
+    });
+
+
+    /// Create an Android Notification Channel.
+    ///
+    /// We use this channel in the `AndroidManifest.xml` file to override the
+    /// default FCM channel to enable heads up notifications.
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+  }
+
+
 
   // Future<void> configureFCM() async {
   //   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -176,6 +258,16 @@ class LoadingPage extends StatelessWidget{
     print('Initialized default app $app');
   }
 
+  Future<void> checkVersion(context) async {
+    final devicesList = await FirebaseFirestore.instance.collection('versions').doc('latest').get();
+
+    // compare to local version
+
+    // if different show snack bar and require update
+
+  }
+
+
   Future<void> loadData(BuildContext context) async {
     if (_dataLoaded) {
       return;
@@ -187,7 +279,7 @@ class LoadingPage extends StatelessWidget{
     //Load last used language
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('language')) {
-      AppLocalizations.of(context).loadNewLocale(Locale(prefs.getString('language'), ''));
+      AppLocalizations.of(context)!.loadNewLocale(Locale(prefs.getString('language').toString(), ''));
     }
 
     final devicesList = await FirebaseFirestore.instance.collection('devices').where("location", isEqualTo: ustroUser.user.locationId).get();

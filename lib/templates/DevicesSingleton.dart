@@ -13,7 +13,7 @@ class Device{
   @protected
   bool available;
   @protected
-  Timestamp endTime;
+  Timestamp? endTime;
 
 
   void setId(String newId){
@@ -29,7 +29,7 @@ class Device{
   void setAvailable(bool newAvailable) {
     available = newAvailable;
   }
-  void setEndTime(Timestamp newEndTime) {
+  void setEndTime(Timestamp? newEndTime) {
     endTime = newEndTime;
   }
 
@@ -40,33 +40,38 @@ class Device{
 abstract class DevicesInfoBase{
 
   @protected
-  Map<String,Device> deviceMap;
+  late Map<String,Device> deviceMap;
 
+  List<Device> getDevices(){
+    List<Device> devicesList = deviceMap.values.toList(growable: false);
+    devicesList.sort((Device a, Device b)=>a.name.compareTo(b.name));
+    return devicesList;
+  }
 
   void useDevice(String deviceId, String userId, Timestamp endTime){
-    deviceMap[deviceId].setAvailable(false);
-    deviceMap[deviceId].setEndTime(endTime);
+    deviceMap[deviceId]!.setAvailable(false);
+    deviceMap[deviceId]!.setEndTime(endTime);
 
     final updateData = {
       "available" : false,
       "current_user_id": userId,
       "end_time" : endTime,
     };
-    print("[INFO] Device ${deviceMap[deviceId].name} is now working");
+    print("[INFO] Device ${deviceMap[deviceId]!.name} is now working");
 
     updateDeviceInFirestore(deviceId, updateData);
   }
 
   void freeDevice(String deviceId, String userId){
-    deviceMap[deviceId].setAvailable(true);
-    deviceMap[deviceId].setEndTime(null);
+    deviceMap[deviceId]!.setAvailable(true);
+    deviceMap[deviceId]!.setEndTime(null);
 
     final updateData = {
       "available" : true,
       "end_time" : null,
       "current_user_id": userId
     };
-    print("[INFO] Device ${deviceMap[deviceId].name} freed successfully");
+    print("[INFO] Device ${deviceMap[deviceId]!.name} freed successfully");
 
     updateDeviceInFirestore(deviceId, updateData);
   }
@@ -106,11 +111,11 @@ abstract class DevicesInfoBase{
   }
 
   void updateDeviceFromDocumentSnapshot(DocumentSnapshot deviceChange){
-    deviceMap[deviceChange.id].setId(deviceChange.id);
-    deviceMap[deviceChange.id].setName(deviceChange.get('name'));
-    deviceMap[deviceChange.id].setAvailable(deviceChange.get('available'));
-    deviceMap[deviceChange.id].setEnabled(deviceChange.get('enabled'));
-    deviceMap[deviceChange.id].setEndTime(deviceChange.get('end_time'));
+    deviceMap[deviceChange.id]!.setId(deviceChange.id);
+    deviceMap[deviceChange.id]!.setName(deviceChange.get('name'));
+    deviceMap[deviceChange.id]!.setAvailable(deviceChange.get('available'));
+    deviceMap[deviceChange.id]!.setEnabled(deviceChange.get('enabled'));
+    deviceMap[deviceChange.id]!.setEndTime(deviceChange.get('end_time'));
   }
 
 
