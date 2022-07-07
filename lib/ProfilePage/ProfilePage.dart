@@ -30,12 +30,33 @@ class _ProfilePageState extends State<ProfilePage>{
     Navigator.of(context).pushNamed(DormSelection.routeName, arguments:
     SelectionArguments(
         AppLocalizations.of(context)!.translate("save")!,
-      (locationId) => {
-        devices.restart(),
-        _user.updateLocation(locationId),
-        Navigator.of(context).popUntil((route) => route.isFirst),
-        Navigator.of(context).pushReplacementNamed(MyHomePage.routeName),
-        Navigator.of(context).pushNamed(ProfilePage.routeName)
+      (locationId) async {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (_) {
+              return Dialog(
+                elevation: 0,
+                insetPadding: EdgeInsets.all(10),
+                backgroundColor: Colors.transparent,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator()
+                    ),
+                  ],
+                ),
+              );
+            }
+        );
+        devices.restart();
+        await _user.updateLocation(locationId);
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(context).pushReplacementNamed(MyHomePage.routeName);
+        Navigator.of(context).pushNamed(ProfilePage.routeName);
       },
       selectionArgument: _user.user.locationId!
     ));
@@ -176,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage>{
                           child: Switch.adaptive(
                               value: _user.user.FCMToken!=null,
                               onChanged: (_value) => setState((){
-                                // _user.updateNotifications(_value); # TODO
+                                _user.updateNotifications(_value);
                               }),
                             activeColor: Theme.of(context).accentColor,
                             inactiveTrackColor: Theme.of(context).accentColor.withOpacity(0.5),

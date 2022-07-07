@@ -92,19 +92,18 @@ abstract class UstroUserBase{
     print("[INFO] User loaded");
     return;
   }
-  // TODO fix FirebaseMessaging
-  // void updateNotifications(bool receiveNotifications) {
-  //   if(receiveNotifications){
-  //     // get new FMC token, save and send to DB
-  //     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  //     _firebaseMessaging.getToken().then((value) => {
-  //       updateFCMToken(value)
-  //     });
-  //   } else {
-  //     // delete token from DB
-  //     updateFCMToken(null);
-  //   }
-  // }
+
+  void updateNotifications(bool receiveNotifications) {
+    if(receiveNotifications){
+      // get new FMC token, save and send to DB
+      FirebaseMessaging.instance.getToken().then((value) => {
+        updateFCMToken(value)
+      });
+    } else {
+      // delete token from DB
+      updateFCMToken(null);
+    }
+  }
 
   void updateFCMToken(var newToken){
     if(newToken == user.FCMToken){
@@ -137,13 +136,13 @@ abstract class UstroUserBase{
 
   }
 
-  void updateLocation(String newLocationId){
+  Future<void> updateLocation(String newLocationId) async {
     if(newLocationId == user.locationId){
       return;
     }
     user.setLocationId(newLocationId);
-    updateUserData(fieldName: "location_id", fieldNewValue: newLocationId);
-    checkIfAdmin();
+    await updateUserData(fieldName: "location_id", fieldNewValue: newLocationId);
+    await checkIfAdmin();
   }
 
   void updateLanguage(String newLanguage, BuildContext context) async {
@@ -155,16 +154,16 @@ abstract class UstroUserBase{
     prefs.setString('language', newLanguage);
     AppLocalizations.of(context)!.loadNewLocale(Locale(newLanguage, ''));
     user.setLanguage(newLanguage);
-    updateUserData(fieldName: "language", fieldNewValue: newLanguage);
+    await updateUserData(fieldName: "language", fieldNewValue: newLanguage);
 
   }
 
-  void updateUserData({Map<String, dynamic>? updateData, String? fieldName, dynamic fieldNewValue}){
+  Future<void> updateUserData({Map<String, dynamic>? updateData, String? fieldName, dynamic fieldNewValue}) async {
     if(updateData != null && updateData.isNotEmpty){
-      FirebaseFirestore.instance.collection('users').doc(user.id).set(updateData,SetOptions(merge: true));
+      await FirebaseFirestore.instance.collection('users').doc(user.id).set(updateData,SetOptions(merge: true));
     }
     if(fieldName != null){
-      FirebaseFirestore.instance.collection('users').doc(user.id).set({fieldName : fieldNewValue},SetOptions(merge: true));
+      await FirebaseFirestore.instance.collection('users').doc(user.id).set({fieldName : fieldNewValue},SetOptions(merge: true));
     } else {
       print("[ERROR] Incorrect data passed to updateDataUser. Update wasn't possible due to lack of necessary data.");
       return;

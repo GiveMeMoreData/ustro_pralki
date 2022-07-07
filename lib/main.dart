@@ -106,7 +106,7 @@ class LoadingPage extends StatelessWidget{
     _initialized = true;
     await initializeDefault(context);
 
-    await checkVersion(context);
+    // await checkVersion(context);
 
     await checkIfLogged(context);
     await configureFCM(context);
@@ -114,6 +114,13 @@ class LoadingPage extends StatelessWidget{
 
   Future<void> setFCMToken() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? currentToken = await prefs.getString("FCM_token");
+      if (currentToken == null){
+        // notifications disabled
+        return;
+      }
+
+      // update notifications
       FirebaseMessaging.instance.getToken().then((token) {
         prefs.setString("FCM_token", token!);
         final String? userId = FirebaseAuth.instance.currentUser?.uid;
@@ -275,15 +282,15 @@ class LoadingPage extends StatelessWidget{
     assert(app != null);
     print('Initialized default app $app');
   }
-
-  Future<void> checkVersion(context) async {
-    final devicesList = await FirebaseFirestore.instance.collection('versions').doc('latest').get();
-
-    // compare to local version
-
-    // if different show snack bar and require update
-
-  }
+  // TODO in next version
+  // Future<void> checkVersion(context) async {
+  //   final devicesList = await FirebaseFirestore.instance.collection('versions').doc('latest').get();
+  //
+  //   // compare to local version
+  //
+  //   // if different show snack bar and require update
+  //
+  // }
 
 
   Future<void> loadData(BuildContext context) async {

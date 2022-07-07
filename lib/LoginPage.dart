@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -79,11 +80,14 @@ class _GoogleLoginState extends State<GoogleLogin>{
       return;
     }
 
+    final String? usersFCMToken = await FirebaseMessaging.instance.getToken();
+    prefs.setString("FCM_token", usersFCMToken!);
+
     Navigator.of(context).popUntil((route) => route.settings.name == GoogleLogin.routeName);
-    addUserIfPossible(user.uid, _newUserLocation!, _newUserLanguage!, prefs.get('FCM_token').toString());
+    addUserIfPossible(user.uid, _newUserLocation!, _newUserLanguage!, usersFCMToken);
   }
 
-  void addUserIfPossible(String userId, String locationId, String language, String token){
+  void addUserIfPossible(String userId, String locationId, String language, String? token){
 
     if(locationId == null || locationId ==""){
       print("Missing locationId data. User could not be added");
