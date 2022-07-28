@@ -29,22 +29,21 @@ class _GoogleLoginState extends State<GoogleLogin>{
   final DevicesInfoBase devices = DevicesInfoState();
 
 
-  Future<bool> checkIfUserInDatabase(User user) async {
+  Future<bool> checkIfNotificationTokenValid(User user) async {
 
     // check if document with user id exists in database
     final DocumentSnapshot userData = await _firestore.collection('users').doc(user.uid).get();
 
-
     if(userData.data() != null){
       // get user FCM token
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      // check if current token is valid
-      if(userData.get('token') == prefs.get('FCM_token')){
+      final currentToken = await FirebaseMessaging.instance.getToken();
+      // check if current token is stored in database
+      if(userData.get('token') == currentToken){
         // document exists with valid token. no action is necessary
         return true;
       }
       // updating token to match currently used device
-      _firestore.collection('users').doc(user.uid).update({"token": prefs.get('FCM_token')});
+      _firestore.collection('users').doc(user.uid).update({"token": currentToken});
       return true;
     }
 
@@ -143,7 +142,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
 
       // check if user exists in database
-      if(await checkIfUserInDatabase(currentUser!)){
+      if(await checkIfNotificationTokenValid(currentUser!)){
         print("Signed in ${currentUser.displayName}, userId: ${currentUser.uid}");
         devices.restart();
         Navigator.pushReplacementNamed(context, "/");
