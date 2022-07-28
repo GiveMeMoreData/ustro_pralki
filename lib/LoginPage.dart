@@ -34,12 +34,12 @@ class _GoogleLoginState extends State<GoogleLogin>{
     // check if document with user id exists in database
     final DocumentSnapshot userData = await _firestore.collection('users').doc(user.uid).get();
 
-    // get user FCM token
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if(userData.data() != null){
+      // get user FCM token
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       // check if current token is valid
-      if(userData.get('token') == prefs.get('FCM_token')){ // TODO check is this works
+      if(userData.get('token') == prefs.get('FCM_token')){
         // document exists with valid token. no action is necessary
         return true;
       }
@@ -149,7 +149,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
         Navigator.pushReplacementNamed(context, "/");
       } else {
         // New user
-
+        createNewAccount(currentUser);
       }
 
 

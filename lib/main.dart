@@ -230,10 +230,19 @@ class LoadingPage extends StatelessWidget{
     if (currentUser == null){
       Navigator.pushReplacementNamed(context, GoogleLogin.routeName);
     } else {
-      ustroUser.restart();
-      await ustroUser.loadUserFromFirebaseAuthUser(currentUser);
-      await ustroUser.checkIfAdmin();
-      loadData(context);
+      // User known to firebase
+      // Check if has data in Firestore database
+
+      final DocumentSnapshot? user = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+      if(user?.data() == null){
+        await FirebaseAuth.instance.signOut();
+        Navigator.pushReplacementNamed(context, GoogleLogin.routeName);
+      } else {
+        ustroUser.restart();
+        await ustroUser.loadUserFromFirebaseAuthUser(currentUser);
+        await ustroUser.checkIfAdmin();
+        loadData(context);
+      }
     }
   }
 
