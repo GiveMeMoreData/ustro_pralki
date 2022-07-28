@@ -64,7 +64,8 @@ class _GoogleLoginState extends State<GoogleLogin>{
     SelectionArguments(
         "Dalej",
             (locationId) => {
-              _newUserLocation = locationId
+              _newUserLocation = locationId,
+              Navigator.of(context).pop()
         }));
 
     if(_newUserLocation == null){
@@ -74,6 +75,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
     await Navigator.of(context).pushNamed(LanguageSelection.routeName, arguments:
     SelectionArguments("Dalej", (language) => {
       _newUserLanguage = language,
+      Navigator.of(context).pop()
     }));
 
     if(_newUserLanguage == null){
@@ -83,8 +85,8 @@ class _GoogleLoginState extends State<GoogleLogin>{
     final String? usersFCMToken = await FirebaseMessaging.instance.getToken();
     prefs.setString("FCM_token", usersFCMToken!);
 
-    Navigator.of(context).popUntil((route) => route.settings.name == GoogleLogin.routeName);
     addUserIfPossible(user.uid, _newUserLocation!, _newUserLanguage!, usersFCMToken);
+    Navigator.of(context).popUntil((route) => route.settings.name == GoogleLogin.routeName);
   }
 
   void addUserIfPossible(String userId, String locationId, String language, String? token){

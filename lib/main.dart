@@ -48,11 +48,12 @@ class MyApp extends StatelessWidget {
       ),
       supportedLocales: [
         Locale('en',''),
-        Locale('pl','PL'),
+        Locale('pl',''),
       ],
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
       initialRoute: "/",
@@ -95,6 +96,17 @@ class LoadingPage extends StatelessWidget{
 
   final DevicesInfoBase devices = DevicesInfoState();
   final UstroUserBase ustroUser = UstroUserState();
+
+
+
+  final FirebaseOptions firebaseOptions = const FirebaseOptions(
+    appId: '1:663108879257:android:7a9fe7e855ed915f700908',
+    apiKey: 'AIzaSyAHDFi5BG8qIIi44SAa1Uo6Jkp04CEpHGk',
+    projectId: 'ustropralki-fd26a',
+    messagingSenderId: '663108879257',
+  );
+
+  static const String firebaseAppName = 'ustropralki';
 
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -202,57 +214,19 @@ class LoadingPage extends StatelessWidget{
 
 
 
-    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+    // FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
   }
-
-
-
-  // Future<void> configureFCM() async {
-  //   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  //   _firebaseMessaging.configure(
-  //     onLaunch: (Map<String, dynamic> message) {
-  //       print('onLaunch called');
-  //       return;
-  //     },
-  //     onResume: (Map<String, dynamic> message) {
-  //       print('onResume called');
-  //       return;
-  //     },
-  //     onMessage: (Map<String, dynamic> message) {
-  //       print('onMessage called');
-  //       return;
-  //     },
-  //     onBackgroundMessage: _onBackgroundMessage,
-  //   );
-  //   _firebaseMessaging.subscribeToTopic('all');
-  //   _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(
-  //     sound: true,
-  //     badge: true,
-  //     alert: true,
-  //   ));
-  //   _firebaseMessaging.onIosSettingsRegistered
-  //       .listen((IosNotificationSettings settings) {
-  //     print('Hello');
-  //   });
-  //
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   _firebaseMessaging.getToken().then((token) {
-  //     prefs.setString("FCM_token", token);
-  //     print("device FCM token: $token");
-  //   });
-  // }
 
   Future<void> _onBackgroundMessage(RemoteMessage message) async {
     // If you're going to use other Firebase services in the background, such as Firestore,
     // make sure you call `initializeApp` before using other Firebase services.
-    await Firebase.initializeApp();
+    // await Firebase.initializeApp( name: firebaseAppName, options:  firebaseOptions);
     print('onBackgroundMessage called');
   }
 
   Future<void> checkIfLogged(BuildContext context) async {
     final currentUser = FirebaseAuth.instance.currentUser;
-
     if (currentUser == null){
       Navigator.pushReplacementNamed(context, GoogleLogin.routeName);
     } else {
@@ -271,14 +245,8 @@ class LoadingPage extends StatelessWidget{
       statusBarIconBrightness: Brightness.dark,
     ));
 
-    final FirebaseOptions firebaseOptions = const FirebaseOptions(
-      appId: '1:663108879257:android:7a9fe7e855ed915f700908',
-      apiKey: 'AIzaSyAHDFi5BG8qIIi44SAa1Uo6Jkp04CEpHGk',
-      projectId: 'ustropralki-fd26a',
-      messagingSenderId: '663108879257',
-    );
 
-    FirebaseApp app = await Firebase.initializeApp( name: 'ustropralki', options:  firebaseOptions);
+    FirebaseApp app = await Firebase.initializeApp( name: firebaseAppName, options:  firebaseOptions);
     assert(app != null);
     print('Initialized default app $app');
   }
