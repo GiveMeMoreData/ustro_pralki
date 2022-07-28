@@ -25,6 +25,9 @@ class _CustomDrawerState extends State<CustomDrawer>{
 
   final UstroUserBase user = UstroUserState();
 
+  static const double? iconSize = 28;
+  static const double? iconFontSize = 22;
+
   Widget adminPanelWidget(bool isAdmin){
     if (!isAdmin) {
       // draw nothing
@@ -44,7 +47,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
             Container(
                 width: 60,
                 alignment: Alignment.center,
-                child: Icon(Icons.build_outlined, size: 32, color: Theme.of(context).accentColor,)
+                child: Icon(Icons.build_outlined, size: iconSize, color: Theme.of(context).accentColor,)
             ),
             SizedBox(
               width: 20,
@@ -55,7 +58,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
                   AppLocalizations.of(context)!.translate('admin')!,
                   maxLines: 1,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: iconFontSize,
                     fontWeight: FontWeight.w300,
                     color: Colors.black ,
                   )
@@ -78,7 +81,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
 
           // drawer header
           Material(
-            elevation: 10,
+            elevation: 5,
             child: Container(
               color: Colors.white,
               height: kToolbarHeight + MediaQuery.of(context).padding.top,
@@ -134,7 +137,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
                   Container(
                     width: 60,
                     alignment: Alignment.center,
-                    child: Icon(Icons.person_outline_rounded , size: 32, color: Theme.of(context).accentColor,)
+                    child: Icon(Icons.person_outline_rounded , size: (iconSize! + 4), color: Theme.of(context).accentColor,)
                   ),
                   SizedBox(
                     width: 20,
@@ -145,7 +148,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
                         AppLocalizations.of(context)!.translate('profile')!,
                         maxLines: 1,
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: iconFontSize,
                           fontWeight: FontWeight.w300,
                           color: Colors.black ,
                         )
@@ -187,7 +190,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
                     alignment: Alignment.center,
                     child: SvgPicture.asset(
                       "res/logout.svg",
-                      height: 28,
+                      height: iconSize,
                       color: Theme.of(context).accentColor,
                     ),
                   ),
@@ -200,7 +203,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
                         AppLocalizations.of(context)!.translate('logout')!,
                         maxLines: 1,
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: iconFontSize,
                           fontWeight: FontWeight.w300,
                           color: Colors.black ,
                         )
