@@ -37,7 +37,7 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   firebase_messaging: ^11.4.1
   flutter_local_notifications: ^9.6.1
-  qrscan: ^0.3.2
+  mobile_scanner: ^2.0.0
   shared_preferences: ^2.0.15
   auto_size_text: ^3.0.0
   flutter_svg: ^1.1.0

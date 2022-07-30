@@ -14,6 +14,7 @@ import 'package:ustropralki/LoginPage.dart';
 import 'package:ustropralki/ProfilePage/DormSelection.dart';
 import 'package:ustropralki/ProfilePage/LanguageSelection.dart';
 import 'package:ustropralki/ProfilePage/ProfilePage.dart';
+import 'package:ustropralki/QRScanPage.dart';
 import 'package:ustropralki/templates/DevicesSingleton.dart';
 import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
@@ -35,6 +36,20 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Ustro Pralki',
       theme: ThemeData(
+        // colorScheme: ColorScheme(
+        //   brightness: Brightness.dark,
+        //   primary: Color(0xFFE55900),
+        //   onPrimary: Color(0xFFE55900),
+        //   secondary: Color(0xFFE55900),
+        //   onSecondary: Color(0xFFE55900),
+        //   background: Color(0xFFFFFFFF),
+        //   onBackground: Color(0xFFF9F3EE),
+        //   error: Colors.red,
+        //   onError: Colors.red,
+        //   surface: Color(0xFFE55900),
+        //   onSurface: Color(0xFFE55900),
+        //
+        // ),
         primaryColor: Color(0xFFE55900),
         primarySwatch: Colors.red,
         disabledColor: Color(0xFFffb080),
@@ -60,6 +75,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/" : (context) => LoadingPage(),
         "/home": (context) => MyHomePage(),
+        "/home/scan": (context) => QRSCanPage(),
         "/profile" : (context) => ProfilePage(),
         "/admin" : (context) => AdminPage(),
         "/admin/add_device" : (context) => AddDevicePage(),

@@ -1,5 +1,4 @@
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,10 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:ustropralki/DeviceDetailsPage.dart';
+import 'package:ustropralki/QRScanPage.dart';
 import 'package:ustropralki/Widgets/Dialogs.dart';
 import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
@@ -125,14 +123,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           return;
                         }
                       }
-
-                      String? cameraScanResult = await scanner.scan();
-
-                      if(cameraScanResult == null){
-                        return;
-                      }
-
-                      checkQRCode(cameraScanResult);
+                      Navigator.of(context).pushNamed(
+                          QRSCanPage.routeName,
+                          arguments: QRScanPageArguments(checkQRCode)
+                      );
                     },
                     borderRadius: BorderRadius.circular(40),
                     splashColor: Colors.black,

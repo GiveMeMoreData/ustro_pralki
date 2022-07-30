@@ -46,7 +46,7 @@ android {
 
     defaultConfig {
         applicationId "pom.pomarancza.ustropralki"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 32
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
