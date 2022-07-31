@@ -29,25 +29,92 @@ class _GoogleLoginState extends State<GoogleLogin>{
   final DevicesInfoBase devices = DevicesInfoState();
 
 
-  Future<bool> checkIfNotificationTokenValid(User user) async {
+  bool isUserInDatabase(DocumentSnapshot userData) {
+    return userData.data() != null;
+  }
 
-    // check if document with user id exists in database
-    final DocumentSnapshot userData = await _firestore.collection('users').doc(user.uid).get();
+  Future<bool> validateNotificationToken(DocumentSnapshot userData, User user) async {
+    // get user FCM token
+    final currentToken = await FirebaseMessaging.instance.getToken();
 
-    if(userData.data() != null){
-      // get user FCM token
-      final currentToken = await FirebaseMessaging.instance.getToken();
-      // check if current token is stored in database
-      if(userData.get('token') == currentToken){
-        // document exists with valid token. no action is necessary
-        return true;
+    try {
+      final String? dbToken = userData.get('token');
+      // check if current mail is stored in database
+      if(dbToken != currentToken){
+        try {
+          // updating token to match currently used device
+          _firestore.collection('users').doc(user.uid).update({"token": currentToken});
+        } on Exception {
+          return false;
+        }
       }
-      // updating token to match currently used device
+    } on StateError {
+      // no 'token' field for this user
       _firestore.collection('users').doc(user.uid).update({"token": currentToken});
-      return true;
+    }
+    return true;
+  }
+
+  Future<bool> validateLocation(DocumentSnapshot userData, User user) async {
+
+    final QuerySnapshot querySnapshot = await _firestore.collection('locations').get();
+    final List locations = querySnapshot.docs.map((doc) => doc.id).toList();
+
+
+    try {
+      final String? dbLocationId = userData.get('location_id');
+      // check if current location_id is in database
+      if(!locations.contains(dbLocationId)){
+        try {
+          // updating location_id to match any currently valid
+          _firestore.collection('users').doc(user.uid).update({"location_id": locations[0]});
+        } on Exception {
+          return false;
+        }
+      }
+    } on StateError {
+      // no 'location_id' field for this user
+      _firestore.collection('users').doc(user.uid).update({"location_id": locations[0]});
     }
 
-    return false;
+    return true;
+  }
+
+  Future<bool> validateMail(DocumentSnapshot userData, User user) async {
+    try {
+      final String? dbMail = userData.get('mail');
+      // check if current token is stored in database
+      if(dbMail != user.email){
+        try {
+          // updating mail to match currently used device
+          _firestore.collection('users').doc(user.uid).update({"mail": user.email});
+        } on Exception {
+          return false;
+        }
+      }
+    } on StateError {
+      // no 'mail' field for this user
+      _firestore.collection('users').doc(user.uid).update({"mail": user.email});
+    }
+    return true;
+  }
+
+  Future<bool> validateAndCorrectUserData(DocumentSnapshot userData, User user) async {
+
+    if (!await validateNotificationToken(userData, user)){
+      return false;
+    }
+
+    if (!await validateLocation(userData, user)){
+      return false;
+    }
+
+    if (!await validateMail(userData, user)){
+      return false;
+    }
+
+    return true;
+
   }
 
   void createNewAccount(User user) async {
@@ -84,11 +151,11 @@ class _GoogleLoginState extends State<GoogleLogin>{
     final String? usersFCMToken = await FirebaseMessaging.instance.getToken();
     prefs.setString("FCM_token", usersFCMToken!);
 
-    addUserIfPossible(user.uid, _newUserLocation!, _newUserLanguage!, usersFCMToken);
+    addUserIfPossible(user.uid, user.email, _newUserLocation!, _newUserLanguage!, usersFCMToken);
     Navigator.of(context).popUntil((route) => route.settings.name == GoogleLogin.routeName);
   }
 
-  void addUserIfPossible(String userId, String locationId, String language, String? token){
+  void addUserIfPossible(String userId, String? mail, String? locationId, String? language, String? token){
 
     if(locationId == null || locationId ==""){
       print("Missing locationId data. User could not be added");
@@ -99,6 +166,7 @@ class _GoogleLoginState extends State<GoogleLogin>{
 
 
     final addData = {
+      'mail': mail,
       'language': language,
       'location_id': locationId,
       'token' : token
@@ -141,12 +209,24 @@ class _GoogleLoginState extends State<GoogleLogin>{
       googleSignIn.signOut();
 
 
+
+      // check if document with user id exists in database
+      final DocumentSnapshot userData = await _firestore.collection('users').doc(currentUser!.uid).get();
+
       // check if user exists in database
-      if(await checkIfNotificationTokenValid(currentUser!)){
+      if(isUserInDatabase(userData)){
+
+        if(!await validateAndCorrectUserData(userData, currentUser)){
+          print("User data in database incorrect and could not be corrected");
+          return;
+        }
+
         print("Signed in ${currentUser.displayName}, userId: ${currentUser.uid}");
         devices.restart();
         Navigator.pushReplacementNamed(context, "/");
+
       } else {
+
         // New user
         createNewAccount(currentUser);
       }
