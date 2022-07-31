@@ -257,6 +257,7 @@ class LoadingPage extends StatelessWidget{
         ustroUser.restart();
         await ustroUser.loadUserFromFirebaseAuthUser(currentUser);
         await ustroUser.checkIfAdmin();
+        setLanguage(context, ustroUser.user);
         loadData(context);
       }
     }
@@ -285,6 +286,10 @@ class LoadingPage extends StatelessWidget{
   //
   // }
 
+  void setLanguage(BuildContext context, UstroUser user) async {
+    //Load language used by user
+    AppLocalizations.of(context)!.loadNewLocale(Locale(user.language!, ''));
+  }
 
   Future<void> loadData(BuildContext context) async {
     if (_dataLoaded) {
@@ -293,12 +298,6 @@ class LoadingPage extends StatelessWidget{
 
     // Prevents double loading of data, app builds this widget twice
     _dataLoaded = true;
-
-    //Load last used language
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('language')) {
-      AppLocalizations.of(context)!.loadNewLocale(Locale(prefs.getString('language').toString(), ''));
-    }
 
     final devicesList = await FirebaseFirestore.instance.collection('devices').where("location", isEqualTo: ustroUser.user.locationId).get();
     devices.restart();
