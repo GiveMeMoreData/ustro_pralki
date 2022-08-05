@@ -25,7 +25,7 @@ class _MyPrivilegesPageState extends State<MyPrivilegesPage> {
           child: Container(
             color: Theme.of(context).backgroundColor,
             alignment: AlignmentDirectional.center,
-            padding: const EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.only(bottom: 20+40, top: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
