@@ -114,7 +114,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       var status = await Permission.camera.status;
                       if(status.isPermanentlyDenied){
-                        // TODO show info
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            AppLocalizations.of(context)!.translate('camera_perm_deny')!,),
+                        ));
                         return;
                       }
                       if(status.isDenied){

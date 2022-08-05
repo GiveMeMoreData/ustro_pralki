@@ -780,7 +780,7 @@ class DeleteDeviceDialog extends StatelessWidget{
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Text(
-                "Usuwanie urządzenia", //TODO localization
+                AppLocalizations.of(context)!.translate("device_deletion")!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
@@ -792,7 +792,7 @@ class DeleteDeviceDialog extends StatelessWidget{
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
               child: Text(
-                "Tej operacji nie da się cofnąć. Czy jesteś pewny, że chcesz usunąć urządzenie?", //TODO localization
+                AppLocalizations.of(context)!.translate("device_delete_dialog")!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
@@ -821,7 +821,7 @@ class DeleteDeviceDialog extends StatelessWidget{
                     alignment: AlignmentDirectional.center,
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                     child: Text(
-                      "Tak", //TODO localization
+                      AppLocalizations.of(context)!.translate("true")!,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -848,7 +848,7 @@ class DeleteDeviceDialog extends StatelessWidget{
                     alignment: AlignmentDirectional.center,
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                     child: Text(
-                      "Nie", //TODO localization
+                      AppLocalizations.of(context)!.translate("false")!,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,

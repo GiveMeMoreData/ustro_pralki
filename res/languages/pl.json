@@ -70,5 +70,10 @@
   "add_admin_failed": "Z przyczyn nieznanych nie udało się dodać administratora",
   "add_admin_exists": "Użytkownik jest już administratorem tego akademika",
   "add_admin_not_found": "Nie znaleziono użytkownika",
-  "add_admin_not_admin": "Bieżący użytkownik nie jest administratorem obecnego akademika"
+  "add_admin_not_admin": "Bieżący użytkownik nie jest administratorem obecnego akademika",
+  "device_delete": "Usuń urządzenie",
+  "device_deletion": "Usuwanie urządenia",
+  "device_delete_dialog": "Tej operacji nie da się cofnąć. Czy jesteś pewny, że chcesz usunąć urządzenie?",
+  "end": "Koniec",
+  "camera_perm_deny": "Permanentnie odmówiono użycia kamery. By to zmienić należy wejść w ustawienia uprawnień"
 }

@@ -70,6 +70,11 @@
   "add_admin_failed": "Adding admin failed due to unknown reasons",
   "add_admin_exists": "User is already an admin of this dormitory",
   "add_admin_not_found": "User not found",
-  "add_admin_not_admin": "Current user is not an admin of this dormitory"
+  "add_admin_not_admin": "Current user is not an admin of this dormitory",
+  "device_delete": "Delete device",
+  "device_deletion": "Device deletion",
+  "device_delete_dialog": "This operation cannot be undone. Are you sure you want to delete device?",
+  "end": "End",
+  "camera_perm_deny": "Access to camera was permanently denied. This can be changed in permissions settings"
 
 }

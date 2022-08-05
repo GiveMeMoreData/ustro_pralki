@@ -75,7 +75,6 @@ abstract class UstroUserBase{
     }
 
     // Checking if user data is loaded and contains information
-    // if(userData.data() == null || userData.data().isEmpty){ # todo find if isEmpty can be truly ignored
     if(userData.data() == null ){
       print("[ERROR] Unsupported error occured. There is no data stored for passed userId ${_user.uid}.uid");
       return;
