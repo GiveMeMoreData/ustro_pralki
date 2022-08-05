@@ -26,7 +26,7 @@
   "login_text": "Zaloguj się żeby skorzystać z nowych funkcji Ustro Pralek!",
   "logout": "Wyloguj",
   "settings": "Ustawienia",
-  "admin": "Panel admina",
+  "admin_page": "Panel admina",
   "profile": "Profil",
   "login_text_info": "Spokojnie, logowanie z Google służy tylko do stworzenia konta użytkownika. Twoje dane są bezpieczne ;)",
   "login_with_google": "Logowanie z Google",
@@ -40,7 +40,7 @@
   "change_notifications": "Powiadomienia",
   "save": "Zapisz",
   "all_admins": "Administracja",
-  "add_admin": "Dodaj admina",
+  "add_admin": "Dodaj administratora",
   "add_device": "Dodaj urządzenie",
   "privileges" : "Moje uprawnienia",
   "inhabitant_role" : "Mieszkaniec",
@@ -61,5 +61,14 @@
   "false": "Nie",
   "enabled": "Włączona",
   "available": "Wolna do użytku",
-  "delete_device": "Usuń urządzenie"
+  "admin": "administrator",
+  "admins": "administratorów",
+  "waking_admins": "Trwa budzenie administracji",
+  "admins_error": "Błąd przy ładowaniu administratorów",
+  "delete_device": "Usuń urządzenie",
+  "add_admin_added": "Administrator dodany",
+  "add_admin_failed": "Z przyczyn nieznanych nie udało się dodać administratora",
+  "add_admin_exists": "Użytkownik jest już administratorem tego akademika",
+  "add_admin_not_found": "Nie znaleziono użytkownika",
+  "add_admin_not_admin": "Bieżący użytkownik nie jest administratorem obecnego akademika"
 }

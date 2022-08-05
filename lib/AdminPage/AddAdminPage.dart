@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ustropralki/HomePage.dart';
 import 'package:ustropralki/Widgets/Tile.dart';
 import 'package:ustropralki/templates/AppBar.dart';
+import 'package:ustropralki/templates/UserSingleton.dart';
 import 'package:ustropralki/templates/localization.dart';
 import '../Widgets/Texts.dart';
 
@@ -15,13 +18,82 @@ class AddAdminPage extends StatefulWidget{
 
 class _AddAdminPageState extends State<AddAdminPage> {
 
-  final TextEditingController _controller = TextEditingController();
+  TextEditingController _controller = TextEditingController();
   String _newAdminEmail = "";
 
-  Future<void> addNewAdmin(){
-    return Future.value(null);
+
+  Future<void> addNewAdmin() async {
+
+    final String processedEmail = _newAdminEmail.trim();
+
+    final QuerySnapshot users = await FirebaseFirestore.instance.collection('users').where('mail', isEqualTo: processedEmail).get();
+    print("Users found: ${users.size}");
+    print("Users: ${users.docs}");
+    try {
+      final DocumentSnapshot user = users.docs.single;
+      print("User found: ${user.id}");
+      final UstroUserBase ustroUser = UstroUserState();
+      await ustroUser.checkIfAdmin();
+      if(!ustroUser.user.isAdmin){
+        // display that user is not an admin of this location
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.translate('add_admin_not_admin')!,),
+        ));
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(context).pushReplacementNamed(MyHomePage.routeName);
+        return;
+      }
+
+      //get current admins
+      final DocumentSnapshot location = await FirebaseFirestore.instance.collection('locations').doc(ustroUser.user.locationId).get();
+      List? currentAdmins = location.get('admin_user_id');
+      if (currentAdmins == null){
+        currentAdmins = [];
+      }
+      if(currentAdmins.contains(user.id)){
+        // info user is admin
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.translate('add_admin_exists')!,),
+        ));
+        _controller.clear();
+        return;
+      }
+      currentAdmins.add(user.id);
+
+      // add user id to location admins
+      try{
+        await FirebaseFirestore.instance.collection('locations').doc(ustroUser.user.locationId).update({"admin_user_id": currentAdmins});
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.translate('add_admin_added')!,),
+        ));
+      } on Exception {
+        //  propagate the information to user
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.translate('add_admin_failed')!,),
+        ));
+      }
+      Navigator.of(context).pop();
+    } on StateError {
+      // snack bar user not found
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.of(context)!.translate('add_admin_not_found')!,),
+      ));
+      _controller.clear();
+
+    }
+
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +133,13 @@ class _AddAdminPageState extends State<AddAdminPage> {
                         decoration: InputDecoration.collapsed(
                             hintText: AppLocalizations.of(context)!.translate("users_email"),
                             hintStyle: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               color: Colors.grey[500],
                               fontWeight: FontWeight.w300,
                             )
                         ),
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           color: const Color(0xFF484848),
                           fontWeight: FontWeight.normal,
                         ),

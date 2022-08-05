@@ -55,7 +55,7 @@ class _CustomDrawerState extends State<CustomDrawer>{
             Container(
               alignment: Alignment.centerLeft,
               child: AutoSizeText(
-                  AppLocalizations.of(context)!.translate('admin')!,
+                  AppLocalizations.of(context)!.translate('admin_page')!,
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: iconFontSize,

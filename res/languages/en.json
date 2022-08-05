@@ -26,7 +26,7 @@
   "login_text": "Login to explore new functions of Ustro Pralki!",
   "logout": "Log out",
   "settings": "Settings",
-  "admin": "Admin's page",
+  "admin_page": "Admin's page",
   "profile": "Profile",
   "login_text_info": "Chill, signing in with Google only allows us to distinguish you from others. Your data is secure :) ",
   "login_with_google": "Login with Google",
@@ -61,6 +61,15 @@
   "false": "No",
   "enabled": "Enabled",
   "available": "Available",
-  "delete_device": "Delete device"
+  "admin": "admin",
+  "admins": "admins",
+  "waking_admins": "Waking admins",
+  "admins_error": "Error occurred during admins loading",
+  "delete_device": "Delete device",
+  "add_admin_added": "Admin added",
+  "add_admin_failed": "Adding admin failed due to unknown reasons",
+  "add_admin_exists": "User is already an admin of this dormitory",
+  "add_admin_not_found": "User not found",
+  "add_admin_not_admin": "Current user is not an admin of this dormitory"
 
 }
